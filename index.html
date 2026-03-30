@@ -139,7 +139,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
   <div style="padding:14px 0;">
     <div class="progress-bar"><div class="progress-fill" id="t-progress" style="width:0%"></div></div>
-    <div style="display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:14px;"><span id="t-pct">0%</span><span id="t-kcal">~0 kcal</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:14px;">
+      <span id="t-pct">0%</span>
+      <button onclick="voiceOn=!voiceOn;this.textContent=voiceOn?'🔊 Voice on':'🔇 Voice off';" style="background:rgba(255,255,255,0.07);border:0.5px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.6);border-radius:20px;padding:4px 12px;font-size:11px;cursor:pointer;font-family:inherit;">🔊 Voice on</button>
+      <span id="t-kcal">~0 kcal</span>
+    </div>
     <div id="t-done-wrap" style="display:none;"></div>
     <button id="t-btn" class="btn-primary" onclick="toggleTimer()">▶ Start</button>
     <div id="t-intervals" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:14px;"></div>
@@ -319,7 +323,7 @@ var TIPS=[
 ];
 
 var completed={},streakDates=[],photos=[],pendingPhoto=null;
-var tWi=0,tSi=0,tIi=0,tElapsed=0,tRunning=false,tDone=false,timerInt=null;
+var tWi=0,tSi=0,tIi=0,tElapsed=0,tRunning=false,tDone=false,timerInt=null,voiceOn=true;
 
 function load(){
   try{completed=JSON.parse(localStorage.getItem("c25k_done")||"{}");}catch(e){completed={};}
@@ -329,7 +333,18 @@ function load(){
 function saveData(){
   try{localStorage.setItem("c25k_done",JSON.stringify(completed));localStorage.setItem("c25k_dates",JSON.stringify(streakDates));localStorage.setItem("c25k_photos",JSON.stringify(photos));}catch(e){}
 }
-function fmt(s){var m=Math.floor(s/60),sc=s%60;return sc===0?m+"m":m+"m "+sc+"s";}
+function speak(text){
+  if(!voiceOn||!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  var u=new SpeechSynthesisUtterance(text);
+  u.rate=0.95;u.pitch=1;u.volume=1;
+  var voices=window.speechSynthesis.getVoices();
+  var preferred=voices.find(function(v){return v.name.indexOf('Samantha')>-1||v.name.indexOf('Karen')>-1||v.name.indexOf('Daniel')>-1;});
+  if(preferred)u.voice=preferred;
+  window.speechSynthesis.speak(u);
+}
+
+var m=Math.floor(s/60),sc=s%60;return sc===0?m+"m":m+"m "+sc+"s";}
 function totalRun(iv){return iv.filter(function(i){return i.t==="r";}).reduce(function(a,b){return a+b.d;},0);}
 function totalAll(iv){return iv.reduce(function(a,b){return a+b.d;},0);}
 function cals(iv){return Math.round(totalRun(iv)/60*7);}
@@ -406,14 +421,37 @@ function toggleTimer(){
   var btn=document.getElementById('t-btn');
   btn.textContent=tRunning?'Pause':'Start';
   if(tRunning){
+    speak('Starting session. Let\'s go!');
     timerInt=setInterval(function(){
       var sess=PLAN[tWi].sessions[tSi];
       var iv=sess.iv[tIi];
+      var prevIsRun=iv.t==="r";
       tElapsed++;
-      if(tElapsed>=iv.d){tIi++;if(tIi>=sess.iv.length){clearInterval(timerInt);tDone=true;tRunning=false;showDone();return;}tElapsed=0;}
+      var remaining=iv.d-tElapsed;
+      if(tElapsed>=iv.d){
+        tIi++;
+        if(tIi>=sess.iv.length){
+          clearInterval(timerInt);tDone=true;tRunning=false;
+          speak('Session complete! Well done, you did it!');
+          showDone();return;
+        }
+        tElapsed=0;
+        var nextIv=sess.iv[tIi];
+        if(nextIv.t==="r"){speak('Start running!');}
+        else{speak('Walk now. Great work!');}
+      } else {
+        if(remaining===30){speak('30 seconds remaining.');}
+        if(remaining===10){speak('10 seconds.');}
+        if(remaining===3){speak('3');}
+        if(remaining===2){speak('2');}
+        if(remaining===1){speak('1');}
+      }
       renderTimer();
     },1000);
-  }else{clearInterval(timerInt);}
+  }else{
+    clearInterval(timerInt);
+    window.speechSynthesis&&window.speechSynthesis.cancel();
+  }
 }
 function showDone(){
   var mot=TIPS[Math.floor(Math.random()*TIPS.length)];
