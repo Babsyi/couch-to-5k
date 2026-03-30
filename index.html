@@ -59,8 +59,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .photo-item img{width:100%;height:100%;object-fit:cover;}
 .photo-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.7));padding:6px 8px;}
 .pace-result{background:linear-gradient(135deg,#1e3a5f,#1a1a2e);border-radius:11px;padding:13px 15px;margin-top:10px;border:1px solid rgba(59,130,246,0.2);}
-.pace-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:0.5px solid rgba(255,255,255,0.05);}
-.pace-row:last-child{border-bottom:none;}
 .tab-bar{display:flex;gap:5px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px;}
 .tab-btn{flex-shrink:0;padding:8px 10px;border-radius:9px;border:0.5px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.4);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;}
 .tab-btn.active{background:rgba(59,130,246,0.18);color:#93c5fd;border-color:rgba(59,130,246,0.3);}
@@ -130,4 +128,573 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="card" style="cursor:pointer;padding:11px 13px;" onclick="showScreen('tools')"><div style="font-size:17px;margin-bottom:3px;">⚡</div><div style="font-size:13px;font-weight:700;">Run tools</div><div style="font-size:11px;color:rgba(255,255,255,0.35);">Pace · Weather · Me</div></div>
       <div class="card" style="cursor:pointer;padding:11px 13px;" onclick="showScreen('photos')"><div style="font-size:17px;margin-bottom:3px;">📸</div><div style="font-size:13px;font-weight:700;">Photo log</div><div style="font-size:11px;color:rgba(255,255,255,0.35);" id="photo-count">0 photos</div></div>
     </div>
-    <div class="card" style="border-left:3px solid #3b82f6;
+    <div class="card" style="border-left:3px solid #3b82f6;"><div style="font-size:10px;color:rgba(255,255,255,0.38);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">Mindset</div><div style="font-size:13px;color:rgba(255,255,255,0.65);line-height:1.6;" id="h-mindset"></div></div>
+  </div>
+</div>
+
+<!-- TIMER -->
+<div id="timer" class="screen">
+  <div id="timer-hero" class="timer-hero">
+    <p style="color:rgba(255,255,255,0.5);font-size:13px;" id="t-label"></p>
+    <div style="font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;color:#60a5fa;" id="t-phase">Walk</div>
+    <div style="font-size:72px;font-weight:700;letter-spacing:-3px;line-height:1;" id="t-time">5m</div>
+    <div style="color:rgba(255,255,255,0.4);font-size:13px;margin-top:6px;" id="t-sub">interval 1</div>
+  </div>
+  <div style="padding:14px 0;">
+    <div class="progress-bar"><div class="progress-fill" id="t-progress" style="width:0%"></div></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+      <span style="font-size:12px;color:rgba(255,255,255,0.4);" id="t-pct">0%</span>
+      <button id="voice-toggle" class="voice-btn on" onclick="toggleVoice()">🔊 Voice on</button>
+      <span style="font-size:12px;color:rgba(255,255,255,0.4);" id="t-kcal">~0 kcal</span>
+    </div>
+    <div id="t-done-wrap" style="display:none;"></div>
+    <button id="t-btn" class="btn-primary" onclick="toggleTimer()">▶ Start</button>
+    <button id="t-skip" onclick="skipInterval()" style="display:none;width:100%;margin-top:8px;padding:11px;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6);border:0.5px solid rgba(255,255,255,0.12);border-radius:11px;font-size:14px;cursor:pointer;font-family:inherit;">Skip to next interval →</button>
+    <div id="t-intervals" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:14px;"></div>
+  </div>
+</div>
+
+<!-- PLAN -->
+<div id="plan" class="screen">
+  <div style="padding-top:8px;">
+    <button class="btn-sm" style="margin-bottom:12px;" onclick="showScreen('home')">← Home</button>
+    <h2 class="section-title" style="margin-top:0;">9-week plan</h2>
+    <div id="plan-list"></div>
+  </div>
+</div>
+
+<!-- BADGES -->
+<div id="badges" class="screen">
+  <div style="padding-top:8px;">
+    <button class="btn-sm" style="margin-bottom:12px;" onclick="showScreen('home')">← Home</button>
+    <h2 class="section-title" style="margin-top:0;">Your badges 🏅</h2>
+    <div id="badge-grid" class="badge-grid"></div>
+  </div>
+</div>
+
+<!-- TOOLS -->
+<div id="tools" class="screen">
+  <div style="padding-top:8px;">
+    <button class="btn-sm" style="margin-bottom:12px;" onclick="showScreen('home')">← Home</button>
+    <div class="tab-bar">
+      <div class="tab-btn active" id="ttab-weather" onclick="toolTab('weather')">🌤 Weather</div>
+      <div class="tab-btn" id="ttab-pace" onclick="toolTab('pace')">⏱ Pace</div>
+      <div class="tab-btn" id="ttab-music" onclick="toolTab('music')">🎵 Music</div>
+      <div class="tab-btn" id="ttab-routes" onclick="toolTab('routes')">📍 Routes</div>
+      <div class="tab-btn" id="ttab-profile" onclick="toolTab('profile')">👤 Me</div>
+    </div>
+
+    <div id="tool-weather-view">
+      <h2 class="section-title" style="margin-top:0;">Weather check 🌤</h2>
+      <p style="font-size:13px;color:rgba(255,255,255,0.45);margin-bottom:14px;">Check conditions before heading out from N4 3FS</p>
+      <button class="btn-primary" onclick="getWeather()" style="margin-bottom:12px;">Check current weather →</button>
+      <div id="weather-result"></div>
+    </div>
+
+    <div id="tool-pace-view" style="display:none;">
+      <h2 class="section-title" style="margin-top:0;">Pace calculator ⏱</h2>
+      <div class="card">
+        <div class="meas-label">Distance (km)</div>
+        <input class="meas-input" type="number" step="0.1" placeholder="e.g. 5" id="pace-dist" oninput="calcPace()" style="margin-bottom:10px;">
+        <div class="meas-label">Time (minutes)</div>
+        <input class="meas-input" type="number" step="1" placeholder="e.g. 35" id="pace-mins" oninput="calcPace()">
+      </div>
+      <div id="pace-result"></div>
+    </div>
+
+    <div id="tool-music-view" style="display:none;">
+      <h2 class="section-title" style="margin-top:0;">Run playlists 🎵</h2>
+      <div class="card" style="display:flex;align-items:center;gap:12px;margin-bottom:9px;"><div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#1a1a2e,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">⚡</div><div style="flex:1;"><div style="font-size:14px;font-weight:600;">Power Run</div><div style="font-size:11px;color:rgba(255,255,255,0.4);">BPM 150-170</div></div><a style="background:#1DB954;color:#fff;border:none;border-radius:20px;padding:7px 12px;font-size:12px;font-weight:600;text-decoration:none;" href="https://open.spotify.com/playlist/37i9dQZF1DX76Wlfdnj7AP">Open</a></div>
+      <div class="card" style="display:flex;align-items:center;gap:12px;margin-bottom:9px;"><div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#0d2b1f,#22c55e);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">✨</div><div style="flex:1;"><div style="font-size:14px;font-weight:600;">Happy Beats</div><div style="font-size:11px;color:rgba(255,255,255,0.4);">Feel-good pop</div></div><a style="background:#1DB954;color:#fff;border:none;border-radius:20px;padding:7px 12px;font-size:12px;font-weight:600;text-decoration:none;" href="https://open.spotify.com/playlist/37i9dQZF1DXdPec7aLTmlC">Open</a></div>
+      <div class="card" style="display:flex;align-items:center;gap:12px;margin-bottom:9px;"><div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#1e1b3a,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🎯</div><div style="flex:1;"><div style="font-size:14px;font-weight:600;">Deep Focus Run</div><div style="font-size:11px;color:rgba(255,255,255,0.4);">Driving beats</div></div><a style="background:#1DB954;color:#fff;border:none;border-radius:20px;padding:7px 12px;font-size:12px;font-weight:600;text-decoration:none;" href="https://open.spotify.com/playlist/37i9dQZF1DWZeKCadgRdKQ">Open</a></div>
+      <div class="card" style="display:flex;align-items:center;gap:12px;"><div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#1a2e1a,#4ade80);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🌅</div><div style="flex:1;"><div style="font-size:14px;font-weight:600;">Easy Morning</div><div style="font-size:11px;color:rgba(255,255,255,0.4);">Steady tempo</div></div><a style="background:#1DB954;color:#fff;border:none;border-radius:20px;padding:7px 12px;font-size:12px;font-weight:600;text-decoration:none;" href="https://open.spotify.com/playlist/37i9dQZF1DX3rxVfibe1L0">Open</a></div>
+    </div>
+
+    <div id="tool-routes-view" style="display:none;">
+      <h2 class="section-title" style="margin-top:0;">Your local routes 📍</h2>
+      <p style="font-size:13px;color:rgba(255,255,255,0.45);margin-bottom:14px;">All starting from City North Place, N4 3FS</p>
+      <div style="font-size:11px;color:#3b82f6;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;font-weight:600;">Beginner · Weeks 1-4</div>
+      <div class="card" style="margin-bottom:9px;border-left:3px solid #22c55e;"><div style="font-size:14px;font-weight:700;margin-bottom:3px;">🌳 Finsbury Park Loop</div><div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px;">~3.2km · Flat tarmac · Parkrun route</div><div style="font-size:12px;color:rgba(255,255,255,0.45);line-height:1.7;margin-bottom:8px;">Head north on Lennox Road, enter park at Oxford Road gate, follow anti-clockwise tarmac path. One loop is 2.4km, add a half lap for 3.2km.</div><a class="btn-sm" href="https://maps.apple.com/?saddr=City+North+Place,+London+N4+3FS&daddr=Finsbury+Park,+London+N4+2NQ&dirflg=w" style="display:inline-block;text-decoration:none;">Open in Maps</a></div>
+      <div class="card" style="margin-bottom:9px;border-left:3px solid #22c55e;"><div style="font-size:14px;font-weight:700;margin-bottom:3px;">🏟️ Emirates Stadium Loop</div><div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px;">~2.5km · Flat · Iconic landmark</div><div style="font-size:12px;color:rgba(255,255,255,0.45);line-height:1.7;margin-bottom:8px;">Head south on Blackstock Road, run the marked route around the Arsenal Emirates Stadium. Flat, well-lit, great for early weeks.</div><a class="btn-sm" href="https://maps.apple.com/?saddr=City+North+Place,+London+N4+3FS&daddr=Emirates+Stadium,+Highbury,+London+N7+7AJ&dirflg=w" style="display:inline-block;text-decoration:none;">Open in Maps</a></div>
+      <div style="font-size:11px;color:#8b5cf6;text-transform:uppercase;letter-spacing:.5px;margin:14px 0 8px;font-weight:600;">Intermediate · Weeks 3-6</div>
+      <div class="card" style="margin-bottom:9px;border-left:3px solid #8b5cf6;"><div style="font-size:14px;font-weight:700;margin-bottom:3px;">🌿 Parkland Walk</div><div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px;">~4km out and back · Traffic-free</div><div style="font-size:12px;color:rgba(255,255,255,0.45);line-height:1.7;margin-bottom:8px;">Pick up Parkland Walk from Finsbury Park station, run north-east along old railway line, turn at 2km near Crouch Hill, run back.</div><a class="btn-sm" href="https://maps.apple.com/?saddr=City+North+Place,+London+N4+3FS&daddr=Parkland+Walk+Finsbury+Park+entrance+London+N4&dirflg=w" style="display:inline-block;text-decoration:none;">Open in Maps</a></div>
+      <div class="card" style="margin-bottom:9px;border-left:3px solid #8b5cf6;"><div style="font-size:14px;font-weight:700;margin-bottom:3px;">🏙️ Highbury Fields Loop</div><div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px;">~5km · Parkrun here Saturdays 9am</div><div style="font-size:12px;color:rgba(255,255,255,0.45);line-height:1.7;margin-bottom:8px;">South on Blackstock Road, left onto Highbury Park, enter Highbury Fields, run the perimeter loop, back via Highbury Grove.</div><a class="btn-sm" href="https://maps.apple.com/?saddr=City+North+Place,+London+N4+3FS&daddr=Highbury+Fields,+London+N5+1AR&dirflg=w" style="display:inline-block;text-decoration:none;">Open in Maps</a></div>
+      <div class="card" style="margin-bottom:9px;border-left:3px solid #8b5cf6;"><div style="font-size:14px;font-weight:700;margin-bottom:3px;">🏛️ Caledonian Park Loop</div><div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px;">~4.5km · Marked running route</div><div style="font-size:12px;color:rgba(255,255,255,0.45);line-height:1.7;margin-bottom:8px;">Head to Caledonian Park near Caledonian Road tube. 600m marked loop around the Grade II listed clock tower. Repeat laps to hit your distance.</div><a class="btn-sm" href="https://maps.apple.com/?saddr=City+North+Place,+London+N4+3FS&daddr=Caledonian+Park,+Market+Road,+London+N7+9PL&dirflg=w" style="display:inline-block;text-decoration:none;">Open in Maps</a></div>
+      <div style="font-size:11px;color:#f59e0b;text-transform:uppercase;letter-spacing:.5px;margin:14px 0 8px;font-weight:600;">Advanced · Weeks 6-9</div>
+      <div class="card" style="margin-bottom:9px;border-left:3px solid #f59e0b;"><div style="font-size:14px;font-weight:700;margin-bottom:3px;">🌊 Clissold Park</div><div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px;">~6km · Deer park and ponds</div><div style="font-size:12px;color:rgba(255,255,255,0.45);line-height:1.7;margin-bottom:8px;">Head east along Green Lanes into Stoke Newington, enter Clissold Park, run the perimeter past the deer enclosure, return via Albion Road.</div><a class="btn-sm" href="https://maps.apple.com/?saddr=City+North+Place,+London+N4+3FS&daddr=Clissold+Park,+Stoke+Newington+Church+Street,+London+N16+9HJ&dirflg=w" style="display:inline-block;text-decoration:none;">Open in Maps</a></div>
+      <div class="card" style="margin-bottom:9px;border-left:3px solid #f59e0b;"><div style="font-size:14px;font-weight:700;margin-bottom:3px;">🏃 FP to Highbury Fields</div><div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px;">~7km · Your 5K race route</div><div style="font-size:12px;color:rgba(255,255,255,0.45);line-height:1.7;margin-bottom:8px;">Run through Finsbury Park, south along Blackstock Road, loop Highbury Fields, return via Highbury Grove. Save for week 8 or 9.</div><a class="btn-sm" href="https://maps.apple.com/?saddr=City+North+Place,+London+N4+3FS&daddr=Highbury+Fields,+London+N5+1AR&dirflg=w" style="display:inline-block;text-decoration:none;">Open in Maps</a></div>
+      <div class="card" style="border-left:3px solid #f59e0b;"><div style="font-size:14px;font-weight:700;margin-bottom:3px;">🎯 Alexandra Palace via Parkland Walk</div><div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px;">~9km · Epic views · End-of-plan run</div><div style="font-size:12px;color:rgba(255,255,255,0.45);line-height:1.7;margin-bottom:8px;">Take the full Parkland Walk from Finsbury Park to Alexandra Palace. Rising steadily with panoramic London views at the top.</div><a class="btn-sm" href="https://maps.apple.com/?saddr=City+North+Place,+London+N4+3FS&daddr=Alexandra+Palace,+London+N22+7AY&dirflg=w" style="display:inline-block;text-decoration:none;">Open in Maps</a></div>
+    </div>
+
+    <div id="tool-profile-view" style="display:none;">
+      <h2 class="section-title" style="margin-top:0;">Your profile 👤</h2>
+      <p style="font-size:13px;color:rgba(255,255,255,0.45);margin-bottom:14px;">Used to calculate accurate calorie burn for your runs</p>
+      <div class="card">
+        <div class="meas-row">
+          <div><div class="meas-label">Weight (kg)</div><input class="meas-input" type="number" step="0.5" placeholder="e.g. 90" id="profile-weight" oninput="updateProfileCalc()"></div>
+          <div><div class="meas-label">Height (cm)</div><input class="meas-input" type="number" step="0.5" placeholder="e.g. 165" id="profile-height" oninput="updateProfileCalc()"></div>
+        </div>
+      </div>
+      <div class="card" style="background:linear-gradient(135deg,#1e3a5f,#1a1a2e);border-color:rgba(59,130,246,0.2);margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:0.5px solid rgba(255,255,255,0.05);">
+          <span style="font-size:12px;color:rgba(255,255,255,0.5);">BMI</span>
+          <span style="font-size:14px;font-weight:700;color:#93c5fd;" id="profile-bmi">—</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;">
+          <span style="font-size:12px;color:rgba(255,255,255,0.5);">Calories per 20min run</span>
+          <span style="font-size:14px;font-weight:700;color:#93c5fd;" id="profile-est">—</span>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="saveProfileSettings()">Save profile ✓</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHOTOS -->
+<div id="photos" class="screen">
+  <div style="padding-top:8px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+      <button class="btn-sm" onclick="showScreen('home')">← Home</button>
+      <button class="btn-sm" onclick="document.getElementById('photo-input').click()" style="color:#3b82f6;border-color:rgba(59,130,246,0.3);">+ Add photo</button>
+    </div>
+    <input type="file" id="photo-input" accept="image/*" capture="environment" style="display:none;" onchange="addPhoto(this)">
+    <h2 class="section-title" style="margin-top:0;">Run photo log 📸</h2>
+    <div id="photo-note" class="card" style="margin-bottom:12px;display:none;">
+      <div class="meas-label">Add a note to your photo</div>
+      <textarea class="notes-input" rows="2" placeholder="How did the run feel?" id="photo-note-text"></textarea>
+      <button class="btn-primary" style="margin-top:8px;font-size:13px;padding:10px;" onclick="savePhoto()">Save photo</button>
+    </div>
+    <div id="photo-grid" class="photo-grid"></div>
+    <div id="photo-empty" class="card" style="text-align:center;color:rgba(255,255,255,0.38);padding:24px;">No photos yet. Tap + Add photo after your next run!</div>
+  </div>
+</div>
+
+<nav class="nav">
+  <button onclick="showScreen('home')" id="nav-home" class="active"><span>🏠</span>Home</button>
+  <button onclick="showScreen('plan')" id="nav-plan"><span>📋</span>Plan</button>
+  <button onclick="showScreen('badges')" id="nav-badges"><span>🏅</span>Badges</button>
+  <button onclick="showScreen('tools')" id="nav-tools"><span>⚡</span>Tools</button>
+  <button onclick="showScreen('photos')" id="nav-photos"><span>📸</span>Photos</button>
+</nav>
+
+<script>
+var PLAN=[
+  {w:1,s:"8x1min run / 1:30 walk",sessions:[
+    {l:"Run 1",iv:[{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:300}]},
+    {l:"Run 2",iv:[{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:300}]},
+    {l:"Run 3",iv:[{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:300}]},
+  ]},
+  {w:2,s:"6x1:30 run / 2min walk",sessions:[
+    {l:"Run 1",iv:[{t:"r",d:90},{t:"w",d:120},{t:"r",d:90},{t:"w",d:120},{t:"r",d:90},{t:"w",d:120},{t:"r",d:90},{t:"w",d:120},{t:"r",d:90},{t:"w",d:120},{t:"r",d:90},{t:"w",d:300}]},
+    {l:"Run 2",iv:[{t:"r",d:90},{t:"w",d:120},{t:"r",d:90},{t:"w",d:120},{t:"r",d:90},{t:"w",d:120},{t:"r",d:90},{t:"w",d:120},{t:"r",d:90},{t:"w",d:120},{t:"r",d:90},{t:"w",d:300}]},
+    {l:"Run 3",iv:[{t:"r",d:90},{t:"w",d:120},{t:"r",d:90},{t:"w",d:120},{t:"r",d:90},{t:"w",d:120},{t:"r",d:90},{t:"w",d:120},{t:"r",d:90},{t:"w",d:120},{t:"r",d:90},{t:"w",d:300}]},
+  ]},
+  {w:3,s:"1:30 and 3min combos",sessions:[
+    {l:"Run 1",iv:[{t:"r",d:90},{t:"w",d:90},{t:"r",d:180},{t:"w",d:180},{t:"r",d:90},{t:"w",d:90},{t:"r",d:180},{t:"w",d:300}]},
+    {l:"Run 2",iv:[{t:"r",d:90},{t:"w",d:90},{t:"r",d:180},{t:"w",d:180},{t:"r",d:90},{t:"w",d:90},{t:"r",d:180},{t:"w",d:300}]},
+    {l:"Run 3",iv:[{t:"r",d:90},{t:"w",d:90},{t:"r",d:180},{t:"w",d:180},{t:"r",d:90},{t:"w",d:90},{t:"r",d:180},{t:"w",d:300}]},
+  ]},
+  {w:4,s:"3min and 5min combos",sessions:[
+    {l:"Run 1",iv:[{t:"r",d:180},{t:"w",d:90},{t:"r",d:300},{t:"w",d:150},{t:"r",d:180},{t:"w",d:90},{t:"r",d:300},{t:"w",d:300}]},
+    {l:"Run 2",iv:[{t:"r",d:180},{t:"w",d:90},{t:"r",d:300},{t:"w",d:150},{t:"r",d:180},{t:"w",d:90},{t:"r",d:300},{t:"w",d:300}]},
+    {l:"Run 3",iv:[{t:"r",d:180},{t:"w",d:90},{t:"r",d:300},{t:"w",d:150},{t:"r",d:180},{t:"w",d:90},{t:"r",d:300},{t:"w",d:300}]},
+  ]},
+  {w:5,s:"5min to 8min to 20min",sessions:[
+    {l:"Run 1",iv:[{t:"r",d:300},{t:"w",d:180},{t:"r",d:300},{t:"w",d:180},{t:"r",d:300},{t:"w",d:300}]},
+    {l:"Run 2",iv:[{t:"r",d:480},{t:"w",d:300},{t:"r",d:480},{t:"w",d:300}]},
+    {l:"Run 3",iv:[{t:"r",d:1200},{t:"w",d:300}]},
+  ]},
+  {w:6,s:"Building to 22 minutes",sessions:[
+    {l:"Run 1",iv:[{t:"r",d:300},{t:"w",d:180},{t:"r",d:480},{t:"w",d:180},{t:"r",d:480},{t:"w",d:300}]},
+    {l:"Run 2",iv:[{t:"r",d:600},{t:"w",d:180},{t:"r",d:600},{t:"w",d:300}]},
+    {l:"Run 3",iv:[{t:"r",d:1320},{t:"w",d:300}]},
+  ]},
+  {w:7,s:"3 x 25 min continuous",sessions:[
+    {l:"Run 1",iv:[{t:"r",d:1500},{t:"w",d:300}]},
+    {l:"Run 2",iv:[{t:"r",d:1500},{t:"w",d:300}]},
+    {l:"Run 3",iv:[{t:"r",d:1500},{t:"w",d:300}]},
+  ]},
+  {w:8,s:"3 x 28 min continuous",sessions:[
+    {l:"Run 1",iv:[{t:"r",d:1680},{t:"w",d:300}]},
+    {l:"Run 2",iv:[{t:"r",d:1680},{t:"w",d:300}]},
+    {l:"Run 3",iv:[{t:"r",d:1680},{t:"w",d:300}]},
+  ]},
+  {w:9,s:"3 x 30 min you did it!",sessions:[
+    {l:"Run 1",iv:[{t:"r",d:1800},{t:"w",d:300}]},
+    {l:"Run 2",iv:[{t:"r",d:1800},{t:"w",d:300}]},
+    {l:"Run 3",iv:[{t:"r",d:1800},{t:"w",d:300}]},
+  ]},
+];
+
+var BADGES=[
+  {id:"first_run",icon:"👟",name:"First step",desc:"Complete your first run",check:function(d,s){return s.length>=1;}},
+  {id:"week1",icon:"📅",name:"Week 1 done",desc:"Complete all of week 1",check:function(d){return d["0-0"]&&d["0-1"]&&d["0-2"];}},
+  {id:"streak3",icon:"🔥",name:"3-day streak",desc:"Run 3 days in a row",check:function(d,s,sd){return calcStreak(sd)>=3;}},
+  {id:"halfway",icon:"🏃",name:"Halfway there",desc:"Complete week 5",check:function(d){return d["4-0"]&&d["4-1"]&&d["4-2"];}},
+  {id:"run20",icon:"⏱",name:"20 minutes!",desc:"Complete week 5 run 3",check:function(d){return d["4-2"];}},
+  {id:"week9",icon:"🎽",name:"Plan complete",desc:"Finish all 9 weeks",check:function(d,s){return s.length>=27;}},
+  {id:"photo1",icon:"📸",name:"Smile!",desc:"Log your first run photo",check:function(d,s,sd,ph){return ph.length>=1;}},
+  {id:"parkrun",icon:"🏅",name:"Parkrun ready",desc:"Complete week 8",check:function(d){return d["7-0"]&&d["7-1"]&&d["7-2"];}},
+  {id:"sessions9",icon:"💪",name:"9 sessions",desc:"Complete 9 sessions",check:function(d,s){return s.length>=9;}},
+];
+
+var TIPS=["You don't need to run fast. Just slow enough to hold a conversation.","Mental health boost: notice 3 things you can see, hear and feel while running.","Missed a day? No stress. Just pick up where you left off.","Rest days matter as much as run days. Embrace them.","If a week feels hard, repeat it. There is no shame in consolidating.","Running outside? Morning light boosts serotonin.","Celebrate every completed session. That is a win.","Stay hydrated before, during and after every run."];
+var EFFORT_LABELS=["Very easy","Easy","Moderate","Hard","Very hard"];
+var EFFORT_ICONS=["😴","🙂","😤","🥵","💀"];
+
+var completed={},streakDates=[],photos=[],pendingPhoto=null;
+var tWi=0,tSi=0,tIi=0,tElapsed=0,tRunning=false,tDone=false,timerInt=null;
+var voiceOn=true,selectedEffort=-1;
+var userWeight=70,userHeight=165;
+var tStartTime=null,tStartElapsedTotal=0;
+
+function load(){
+  try{completed=JSON.parse(localStorage.getItem("c25k_done")||"{}");}catch(e){completed={};}
+  try{streakDates=JSON.parse(localStorage.getItem("c25k_dates")||"[]");}catch(e){streakDates=[];}
+  try{photos=JSON.parse(localStorage.getItem("c25k_photos")||"[]");}catch(e){photos=[];}
+  try{userWeight=parseFloat(localStorage.getItem("c25k_uw")||"70");}catch(e){}
+  try{userHeight=parseFloat(localStorage.getItem("c25k_uh")||"165");}catch(e){}
+}
+function saveData(){
+  try{localStorage.setItem("c25k_done",JSON.stringify(completed));localStorage.setItem("c25k_dates",JSON.stringify(streakDates));localStorage.setItem("c25k_photos",JSON.stringify(photos));}catch(e){}
+}
+function fmt(s){var m=Math.floor(s/60),sc=s%60;return sc===0?m+"m":m+"m "+sc+"s";}
+function totalRun(iv){return iv.filter(function(i){return i.t==="r";}).reduce(function(a,b){return a+b.d;},0);}
+function totalAll(iv){return iv.reduce(function(a,b){return a+b.d;},0);}
+function calcCals(iv){return Math.round((8.0*3.5*userWeight/200)*(totalRun(iv)/60));}
+function calcStreak(sd){
+  if(!sd||!sd.length)return 0;
+  var days=sd.map(function(d){return d.split("T")[0];}).filter(function(v,i,a){return a.indexOf(v)===i;}).sort().reverse();
+  var today=new Date().toISOString().split("T")[0],count=0,cur=today;
+  for(var i=0;i<days.length;i++){if(days[i]===cur){count++;var dt=new Date(cur);dt.setDate(dt.getDate()-1);cur=dt.toISOString().split("T")[0];}else break;}
+  return count;
+}
+function getInfo(){var done=Object.keys(completed).length;return{done:done,wk:Math.min(Math.floor(done/3)+1,9)};}
+
+function speak(text){
+  if(!voiceOn||!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  var u=new SpeechSynthesisUtterance(text);
+  u.rate=0.95;u.pitch=1;u.volume=1;
+  window.speechSynthesis.speak(u);
+}
+function vibrate(p){if(window.navigator&&window.navigator.vibrate)window.navigator.vibrate(p);}
+function announceInterval(type){
+  if(type==="r"){speak("Start running!");vibrate([100,50,100,50,200]);}
+  else{speak("Walk now. Great work!");vibrate([400]);}
+}
+function announceCountdown(rem){
+  if(rem===30){speak("30 seconds remaining.");vibrate([80]);}
+  else if(rem===10){speak("10 seconds.");vibrate([80,50,80]);}
+  else if(rem===3){speak("3");vibrate([60]);}
+  else if(rem===2){speak("2");vibrate([60]);}
+  else if(rem===1){speak("1");vibrate([60]);}
+}
+function toggleVoice(){
+  voiceOn=!voiceOn;
+  var btn=document.getElementById("voice-toggle");
+  btn.textContent=voiceOn?"🔊 Voice on":"🔇 Voice off";
+  btn.className="voice-btn"+(voiceOn?" on":"");
+  if(!voiceOn&&window.speechSynthesis)window.speechSynthesis.cancel();
+}
+
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(function(s){s.classList.remove("active");});
+  document.querySelectorAll(".nav button").forEach(function(b){b.classList.remove("active");});
+  document.getElementById(id).classList.add("active");
+  var nb=document.getElementById("nav-"+id);if(nb)nb.classList.add("active");
+  if(id==="home")renderHome();
+  if(id==="plan")renderPlan();
+  if(id==="badges")renderBadges();
+  if(id==="photos")renderPhotos();
+}
+
+function renderHome(){
+  var r=getInfo();
+  document.getElementById("h-done").textContent=r.done;
+  document.getElementById("h-week").textContent=r.wk;
+  document.getElementById("h-streak").textContent=calcStreak(streakDates)+"🔥";
+  document.getElementById("h-progress").style.width=Math.round(r.done/27*100)+"%";
+  document.getElementById("h-mindset").textContent=TIPS[r.done%TIPS.length];
+  var earned=BADGES.filter(function(b){return b.check(completed,Object.keys(completed),streakDates,photos);}).length;
+  document.getElementById("badge-count").textContent=earned+" earned";
+  document.getElementById("photo-count").textContent=photos.length+" photo"+(photos.length!==1?"s":"");
+  var wi=r.wk-1,nextSi=-1;
+  for(var i=0;i<PLAN[wi].sessions.length;i++){if(!completed[wi+"-"+i]){nextSi=i;break;}}
+  var wrap=document.getElementById("home-next");
+  if(nextSi===-1){wrap.innerHTML='<div class="card" style="background:linear-gradient(135deg,#0d2b1f,#1a4a35);border-color:rgba(74,222,128,0.3);text-align:center;margin-bottom:9px;"><div style="font-size:28px;margin-bottom:6px;">🎉</div><div style="font-size:17px;font-weight:800;">Week '+r.wk+' complete!</div></div>';return;}
+  var sess=PLAN[wi].sessions[nextSi];
+  var sessIv=[{t:"w",d:300}].concat(sess.iv);
+  wrap.innerHTML='<div class="card" style="background:linear-gradient(135deg,#1a1a2e,#0f3460);border-color:rgba(59,130,246,0.25);margin-bottom:9px;"><div style="font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px;">Next session</div><div style="font-size:17px;font-weight:800;margin-bottom:2px;">Week '+r.wk+' - '+sess.l+'</div><div style="font-size:12px;color:rgba(255,255,255,0.45);margin-bottom:4px;">'+PLAN[wi].s+'</div><div style="font-size:12px;color:rgba(255,255,255,0.35);margin-bottom:12px;">5min warm-up walk + ~'+calcCals(sessIv)+' kcal</div><button class="btn-primary" onclick="startSession('+wi+','+nextSi+')" style="font-size:14px;padding:11px;">Start session</button></div>';
+}
+
+function buildSessionIv(wi,si){
+  return [{t:"w",d:300}].concat(PLAN[wi].sessions[si].iv);
+}
+
+function startSession(wi,si){
+  tWi=wi;tSi=si;tIi=0;tElapsed=0;tRunning=false;tDone=false;selectedEffort=-1;
+  tStartTime=null;tStartElapsedTotal=0;
+  clearInterval(timerInt);
+  document.getElementById("t-label").textContent="Week "+(wi+1)+" - "+PLAN[wi].sessions[si].l;
+  document.getElementById("t-done-wrap").style.display="none";
+  document.getElementById("t-skip").style.display="none";
+  var btn=document.getElementById("t-btn");
+  btn.style.display="block";btn.textContent="▶ Start";btn.onclick=toggleTimer;
+  var vbtn=document.getElementById("voice-toggle");
+  vbtn.textContent=voiceOn?"🔊 Voice on":"🔇 Voice off";
+  vbtn.className="voice-btn"+(voiceOn?" on":"");
+  renderTimer();
+  showScreen("timer");
+}
+
+function getSessionIv(){return buildSessionIv(tWi,tSi);}
+
+function renderTimer(){
+  var iv=getSessionIv();
+  var cur=iv[tIi];
+  var rem=cur.d-tElapsed;
+  var elTot=iv.slice(0,tIi).reduce(function(a,b){return a+b.d;},0)+tElapsed;
+  var pct=Math.round(elTot/totalAll(iv)*100);
+  var isRun=cur.t==="r";
+  document.getElementById("timer-hero").className="timer-hero"+(isRun?"":" walk");
+  var phase=document.getElementById("t-phase");
+  phase.textContent=isRun?"🏃 Run":"🚶 Walk";
+  phase.style.color=isRun?"#60a5fa":"#4ade80";
+  var timeEl=document.getElementById("t-time");
+  if(tIi===0&&!tRunning&&rem===300){timeEl.textContent="5m";document.getElementById("t-sub").textContent="Warm-up walk";}
+  else{timeEl.textContent=fmt(rem);document.getElementById("t-sub").textContent="interval "+(tIi+1)+" of "+iv.length;}
+  document.getElementById("t-progress").style.width=pct+"%";
+  document.getElementById("t-pct").textContent=pct+"% done";
+  document.getElementById("t-kcal").textContent="~"+calcCals(iv)+" kcal";
+  document.getElementById("t-intervals").innerHTML=iv.slice(tIi).map(function(x){return'<span class="pill '+(x.t==="r"?"run":"walk")+'">'+(x.t==="r"?"run":"walk")+" "+fmt(x.d)+"</span>";}).join("");
+}
+
+function toggleTimer(){
+  if(tDone)return;
+  tRunning=!tRunning;
+  var btn=document.getElementById("t-btn");
+  btn.textContent=tRunning?"⏸ Pause":"▶ Start";
+  if(tRunning){
+    tStartTime=Date.now();
+    tStartElapsedTotal=calcTotalElapsed();
+    if(tIi===0&&tElapsed===0){speak("5 minute warm-up walk. Take it easy.");vibrate([100,50,100]);}
+    else{speak("Starting session. Lets go!");vibrate([100,50,100,50,100]);}
+    document.getElementById("t-skip").style.display="block";
+    timerInt=setInterval(function(){
+      var iv=getSessionIv();
+      var nowElapsed=tStartElapsedTotal+Math.floor((Date.now()-tStartTime)/1000);
+      var pos=elapsedToPos(iv,nowElapsed);
+      if(pos.done){
+        clearInterval(timerInt);tDone=true;tRunning=false;
+        speak("Session complete! Well done, you did it!");
+        vibrate([200,100,200,100,400]);
+        showDone();return;
+      }
+      if(pos.iIdx!==tIi){
+        var oldIi=tIi;
+        tIi=pos.iIdx;
+        tElapsed=pos.elapsed;
+        announceInterval(iv[tIi].t);
+      } else {
+        var oldRem=iv[tIi].d-tElapsed;
+        tElapsed=pos.elapsed;
+        var newRem=iv[tIi].d-tElapsed;
+        announceCountdown(newRem);
+      }
+      tElapsed=pos.elapsed;
+      tIi=pos.iIdx;
+      renderTimer();
+    },500);
+  } else {
+    clearInterval(timerInt);
+    tStartElapsedTotal=calcTotalElapsed();
+    document.getElementById("t-skip").style.display="none";
+    if(window.speechSynthesis)window.speechSynthesis.cancel();
+  }
+}
+
+function calcTotalElapsed(){
+  if(!tRunning||!tStartTime)return getIvOffset()+tElapsed;
+  return tStartElapsedTotal+Math.floor((Date.now()-tStartTime)/1000);
+}
+
+function getIvOffset(){
+  var iv=getSessionIv();
+  var off=0;
+  for(var i=0;i<tIi;i++)off+=iv[i].d;
+  return off;
+}
+
+function elapsedToPos(iv,totalElapsed){
+  var acc=0;
+  for(var i=0;i<iv.length;i++){
+    if(totalElapsed<acc+iv[i].d){return{iIdx:i,elapsed:totalElapsed-acc,done:false};}
+    acc+=iv[i].d;
+  }
+  return{iIdx:iv.length-1,elapsed:iv[iv.length-1].d,done:true};
+}
+
+function skipInterval(){
+  if(tDone)return;
+  var iv=getSessionIv();
+  tIi++;
+  if(tIi>=iv.length){clearInterval(timerInt);tDone=true;tRunning=false;speak("Session complete! Well done, you did it!");vibrate([200,100,200,100,400]);showDone();return;}
+  tElapsed=0;
+  announceInterval(iv[tIi].t);
+  renderTimer();
+}
+
+function showDone(){
+  document.getElementById("t-skip").style.display="none";
+  var mot=TIPS[Math.floor(Math.random()*TIPS.length)];
+  var iv=getSessionIv();
+  var dw=document.getElementById("t-done-wrap");
+  dw.style.display="block";
+  dw.innerHTML='<div class="card" style="background:linear-gradient(135deg,#1a1a2e,#0f3460);border-color:rgba(59,130,246,0.3);text-align:center;margin-bottom:10px;"><div style="font-size:32px;margin-bottom:6px;">🎉</div><div style="font-size:18px;font-weight:800;margin-bottom:4px;">Session complete!</div><div style="font-size:13px;color:#60a5fa;margin-bottom:8px;">~'+calcCals(iv)+' kcal burned</div><p style="font-size:13px;color:rgba(255,255,255,0.5);">'+mot+'</p></div>'
+  +'<div class="card" style="margin-bottom:10px;"><div style="font-size:13px;font-weight:700;margin-bottom:10px;">How hard was that? 💪</div><div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;">'+EFFORT_ICONS.map(function(e,i){return'<button class="effort-btn" id="eff-'+i+'" onclick="selectEffort('+i+')"><div style="font-size:22px;margin-bottom:3px;">'+e+'</div><div style="font-size:9px;color:rgba(255,255,255,0.4);">'+EFFORT_LABELS[i]+'</div></button>';}).join("")+'</div></div>';
+  var btn=document.getElementById("t-btn");
+  btn.textContent="Save and continue";
+  btn.onclick=markDone;
+}
+
+function selectEffort(i){
+  selectedEffort=i;
+  for(var j=0;j<5;j++){var b=document.getElementById("eff-"+j);if(b)b.className="effort-btn"+(j===i?" selected":"");}
+}
+
+function markDone(){
+  var key=tWi+"-"+tSi;
+  var iv=getSessionIv();
+  completed[key]={date:new Date().toISOString(),effort:selectedEffort,kcal:calcCals(iv)};
+  selectedEffort=-1;
+  streakDates.push(new Date().toISOString());
+  saveData();checkBadges();renderHome();showScreen("home");
+}
+
+function checkBadges(){
+  BADGES.forEach(function(b){
+    if(b.check(completed,Object.keys(completed),streakDates,photos)){
+      if(!localStorage.getItem("badge_"+b.id)){localStorage.setItem("badge_"+b.id,"1");setTimeout(function(){alert("Badge earned: "+b.icon+" "+b.name+"!");},500);}
+    }
+  });
+}
+
+function renderPlan(){
+  var r=getInfo();
+  document.getElementById("plan-list").innerHTML=PLAN.map(function(wk,wi){
+    var wDone=wk.sessions.filter(function(_,si){return completed[wi+"-"+si];}).length;
+    var isCur=wi+1===r.wk;
+    var btns=wk.sessions.map(function(s,si){
+      var done=completed[wi+"-"+si];
+      var prevDone=si===0||completed[wi+"-"+(si-1)];
+      var prevWk=wi===0||PLAN[wi-1].sessions.every(function(_,psi){return completed[(wi-1)+"-"+psi];});
+      var unlocked=prevWk&&prevDone;
+      var cls="sess-btn"+(done?" done":unlocked?" unlocked":"");
+      var click=(!done&&unlocked)?'onclick="startSession('+wi+","+si+')"':"";
+      return'<button class="'+cls+'" '+click+">"+(done?"Done ":"")+s.l+"</button>";
+    }).join("");
+    return'<div class="week-card'+(isCur?" current":"")+'"><div class="week-header"><div><span style="font-size:14px;font-weight:700;color:'+(isCur?"#93c5fd":"rgba(255,255,255,0.8)")+'">Week '+(wi+1)+'</span><span style="font-size:11px;color:rgba(255,255,255,0.4);margin-left:8px;">'+wk.s+'</span></div><span style="font-size:12px;color:rgba(255,255,255,0.35);">'+wDone+'/3</span></div><div style="padding:8px 12px 12px;display:flex;gap:8px;">'+btns+"</div></div>";
+  }).join("");
+}
+
+function renderBadges(){
+  document.getElementById("badge-grid").innerHTML=BADGES.map(function(b){
+    var earned=b.check(completed,Object.keys(completed),streakDates,photos);
+    return'<div class="badge'+(earned?" earned":"")+'"><div class="badge-icon">'+b.icon+'</div><div class="badge-name">'+b.name+'</div><div class="badge-desc">'+b.desc+"</div></div>";
+  }).join("");
+}
+
+function toolTab(t){
+  ["weather","pace","music","routes","profile"].forEach(function(x){
+    var el=document.getElementById("tool-"+x+"-view");
+    if(el)el.style.display=x===t?"block":"none";
+    var btn=document.getElementById("ttab-"+x);
+    if(btn)btn.className="tab-btn"+(x===t?" active":"");
+  });
+  if(t==="profile"){
+    document.getElementById("profile-weight").value=userWeight;
+    document.getElementById("profile-height").value=userHeight;
+    updateProfileCalc();
+  }
+}
+
+function updateProfileCalc(){
+  var w=parseFloat(document.getElementById("profile-weight").value)||userWeight;
+  var h=parseFloat(document.getElementById("profile-height").value)||userHeight;
+  if(w&&h){
+    var bmi=(w/((h/100)*(h/100))).toFixed(1);
+    var cat=bmi<18.5?"Underweight":bmi<25?"Healthy weight":bmi<30?"Overweight":"Obese";
+    document.getElementById("profile-bmi").textContent=bmi+" ("+cat+")";
+    document.getElementById("profile-est").textContent="~"+Math.round((8.0*3.5*w/200)*20)+" kcal";
+  }
+}
+
+function saveProfileSettings(){
+  userWeight=parseFloat(document.getElementById("profile-weight").value)||70;
+  userHeight=parseFloat(document.getElementById("profile-height").value)||165;
+  try{localStorage.setItem("c25k_uw",userWeight);localStorage.setItem("c25k_uh",userHeight);}catch(e){}
+  updateProfileCalc();
+  alert("Profile saved! Calorie estimates updated.");
+}
+
+function getWeather(){
+  var res=document.getElementById("weather-result");
+  res.innerHTML='<div class="card" style="text-align:center;color:rgba(255,255,255,0.5);padding:16px;">Getting your location...</div>';
+  if(!navigator.geolocation){res.innerHTML='<div class="card" style="color:rgba(255,255,255,0.5);">Location not available.</div>';return;}
+  navigator.geolocation.getCurrentPosition(function(pos){
+    fetch("https://api.open-meteo.com/v1/forecast?latitude="+pos.coords.latitude+"&longitude="+pos.coords.longitude+"&current=temperature_2m,weathercode,windspeed_10m,precipitation&timezone=auto")
+    .then(function(r){return r.json();})
+    .then(function(data){
+      var c=data.current,temp=Math.round(c.temperature_2m),wind=Math.round(c.windspeed_10m),rain=c.precipitation,code=c.weathercode;
+      var emoji=code===0?"☀️":code<=3?"⛅":code<=67?"🌧️":code<=77?"❄️":"🌩️";
+      var desc=code===0?"Clear sky":code<=3?"Partly cloudy":code<=67?"Rainy":code<=77?"Snow":"Thunderstorm";
+      var advice=rain>0?"Rain - wear waterproofs":wind>30?"Very windy - layer up":temp<5?"Cold - warm up indoors first":temp>25?"Hot - hydrate well":"Good running conditions!";
+      res.innerHTML='<div class="weather-card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;"><div style="font-size:40px;">'+emoji+'</div><div><div style="font-size:22px;font-weight:800;">'+temp+'C</div><div style="font-size:13px;color:rgba(255,255,255,0.5);">'+desc+'</div></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;"><div style="background:rgba(255,255,255,0.05);border-radius:8px;padding:8px;"><div style="font-size:10px;color:rgba(255,255,255,0.4);">WIND</div><div style="font-size:16px;font-weight:700;">'+wind+' km/h</div></div><div style="background:rgba(255,255,255,0.05);border-radius:8px;padding:8px;"><div style="font-size:10px;color:rgba(255,255,255,0.4);">RAIN</div><div style="font-size:16px;font-weight:700;">'+rain+'mm</div></div></div><div style="font-size:13px;color:#93c5fd;">'+advice+"</div></div>";
+    }).catch(function(){res.innerHTML='<div class="card" style="color:rgba(255,255,255,0.5);">Could not load weather.</div>';});
+  },function(){res.innerHTML='<div class="card" style="color:rgba(255,255,255,0.5);">Location access denied.</div>';});
+}
+
+function calcPace(){
+  var dist=parseFloat(document.getElementById("pace-dist").value);
+  var mins=parseFloat(document.getElementById("pace-mins").value);
+  var res=document.getElementById("pace-result");
+  if(!dist||!mins||dist<=0||mins<=0){res.innerHTML="";return;}
+  var pkm=mins/dist,pm=Math.floor(pkm),ps=Math.round((pkm-pm)*60),spd=(dist/(mins/60)).toFixed(1);
+  var fkm=Math.round(pkm*5),fh=Math.floor(fkm/60),fm=fkm%60;
+  res.innerHTML='<div class="pace-result"><div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:0.5px solid rgba(255,255,255,0.05);"><span style="font-size:12px;color:rgba(255,255,255,0.5);">Pace</span><span style="font-size:16px;font-weight:700;color:#93c5fd;">'+pm+":"+(ps<10?"0":"")+ps+' per km</span></div><div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:0.5px solid rgba(255,255,255,0.05);"><span style="font-size:12px;color:rgba(255,255,255,0.5);">Speed</span><span style="font-size:14px;font-weight:700;">'+spd+' km/h</span></div><div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;"><span style="font-size:12px;color:rgba(255,255,255,0.5);">Est 5K time</span><span style="font-size:14px;font-weight:700;">'+(fh>0?fh+"h ":"")+fm+" min</span></div></div>";
+}
+
+function addPhoto(input){
+  if(!input.files||!input.files[0])return;
+  var reader=new FileReader();
+  reader.onload=function(e){pendingPhoto={data:e.target.result,date:new Date().toISOString(),note:""};document.getElementById("photo-note").style.display="block";document.getElementById("photo-note-text").value="";};
+  reader.readAsDataURL(input.files[0]);
+}
+function savePhoto(){
+  if(!pendingPhoto)return;
+  pendingPhoto.note=document.getElementById("photo-note-text").value;
+  photos.unshift(pendingPhoto);pendingPhoto=null;
+  document.getElementById("photo-note").style.display="none";
+  saveData();checkBadges();renderPhotos();
+  var pc=document.getElementById("photo-count");if(pc)pc.textContent=photos.length+" photo"+(photos.length!==1?"s":"");
+}
+function renderPhotos(){
+  var grid=document.getElementById("photo-grid"),empty=document.getElementById("photo-empty");
+  if(!photos.length){grid.innerHTML="";empty.style.display="block";return;}
+  empty.style.display="none";
+  grid.innerHTML=photos.map(function(p){var d=new Date(p.date).toLocaleDateString("en-GB",{day:"numeric",month:"short"});return'<div class="photo-item"><img src="'+p.data+'" alt="run photo"><div class="photo-overlay"><div style="font-size:11px;font-weight:600;color:#fff;">'+d+"</div>"+(p.note?'<div style="font-size:10px;color:rgba(255,255,255,0.7);">'+p.note+"</div>":"")+"</div></div>";}).join("");
+}
+
+load();renderHome();
+(function(){
+  var splash=document.getElementById("splash");
+  var dots=[document.getElementById("cd0"),document.getElementById("cd1"),document.getElementById("cd2")];
+  var d=0;
+  var di=setInterval(function(){d=(d+1)%3;for(var i=0;i<dots.length;i++){dots[i].style.background=i===d?"#3b82f6":"rgba(255,255,255,0.2)";}},400);
+  setTimeout(function(){clearInterval(di);splash.style.transition="opacity 0.5s ease";splash.style.opacity="0";setTimeout(function(){splash.style.display="none";},500);},2200);
+})();
+</script>
+</body>
+</html>
