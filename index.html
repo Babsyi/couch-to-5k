@@ -11,13 +11,13 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0a0f1e;color:#fff;min-height:100vh;overscroll-behavior:none;}
 #splash{position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;}
-.screen{display:none;max-width:480px;margin:0 auto;padding:env(safe-area-inset-top,20px) 16px 90px;}
+.screen{display:none;max-width:480px;margin:0 auto;padding:env(safe-area-inset-top,44px) 16px 90px;}
 .screen.active{display:block;}
 .nav{position:fixed;bottom:0;left:0;right:0;background:#12121f;border-top:1px solid rgba(255,255,255,0.07);display:flex;padding:6px 0 calc(6px + env(safe-area-inset-bottom,0px));z-index:100;}
 .nav button{flex:1;background:none;border:none;color:rgba(255,255,255,0.3);font-size:9px;cursor:pointer;padding:4px 0;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:inherit;}
 .nav button.active{color:#3b82f6;}
 .nav button span{font-size:17px;}
-.hero{background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);margin:-20px -16px 0;padding:calc(env(safe-area-inset-top,20px)+18px) 18px 24px;border-radius:0 0 24px 24px;}
+.hero{background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);margin:-20px -16px 0;padding:calc(env(safe-area-inset-top,44px)+28px) 18px 28px;border-radius:0 0 24px 24px;}
 .card{background:#12121f;border:0.5px solid rgba(255,255,255,0.08);border-radius:13px;padding:13px 15px;margin-bottom:9px;}
 .btn-primary{width:100%;padding:13px;background:linear-gradient(135deg,#1d4ed8,#7c3aed);color:#fff;border:none;border-radius:11px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;}
 .btn-sm{padding:7px 14px;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.7);border:0.5px solid rgba(255,255,255,0.12);border-radius:9px;font-size:12px;cursor:pointer;font-family:inherit;}
@@ -36,7 +36,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .sess-btn{flex:1;padding:10px 4px;border-radius:8px;border:0.5px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.4);font-size:12px;cursor:pointer;font-family:inherit;}
 .sess-btn.done{background:#0d2b1f;color:#4ade80;border-color:#1a4a35;}
 .sess-btn.unlocked{background:rgba(255,255,255,0.07);color:#fff;}
-.timer-hero{background:linear-gradient(135deg,#1a1a2e,#0f3460);margin:-20px -16px 0;padding:calc(env(safe-area-inset-top,20px)+18px) 18px 24px;border-radius:0 0 24px 24px;text-align:center;}
+.timer-hero{background:linear-gradient(135deg,#1a1a2e,#0f3460);margin:-20px -16px 0;padding:calc(env(safe-area-inset-top,44px)+28px) 18px 28px;border-radius:0 0 24px 24px;text-align:center;}
 .timer-hero.walk{background:linear-gradient(135deg,#0d2b1f,#1a4a35);}
 .pill{display:inline-flex;align-items:center;padding:4px 10px;border-radius:20px;font-size:11px;}
 .pill.run{background:#1e3a5f;color:#93c5fd;border:1px solid #2d4a7a;}
@@ -65,6 +65,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .tab-btn.active{background:rgba(59,130,246,0.18);color:#93c5fd;border-color:rgba(59,130,246,0.3);}
 .notes-input{width:100%;background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.07);border-radius:7px;padding:8px 10px;color:rgba(255,255,255,0.7);font-size:13px;font-family:inherit;resize:none;}
 .notes-input:focus{outline:none;border-color:#3b82f6;}
+.voice-btn{background:rgba(255,255,255,0.07);border:0.5px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);border-radius:20px;padding:5px 14px;font-size:12px;cursor:pointer;font-family:inherit;}
+.voice-btn.on{background:rgba(59,130,246,0.2);border-color:rgba(59,130,246,0.4);color:#93c5fd;}
 </style>
 </head>
 <body>
@@ -133,19 +135,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div id="timer" class="screen">
   <div id="timer-hero" class="timer-hero">
     <p style="color:rgba(255,255,255,0.5);font-size:13px;" id="t-label"></p>
-    <div style="font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;" id="t-phase">Walk</div>
+    <div style="font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;color:#60a5fa;" id="t-phase">Walk</div>
     <div style="font-size:72px;font-weight:700;letter-spacing:-3px;line-height:1;" id="t-time">5m</div>
     <div style="color:rgba(255,255,255,0.4);font-size:13px;margin-top:6px;" id="t-sub">interval 1</div>
   </div>
   <div style="padding:14px 0;">
     <div class="progress-bar"><div class="progress-fill" id="t-progress" style="width:0%"></div></div>
-    <div style="display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:14px;">
-      <span id="t-pct">0%</span>
-      <button onclick="voiceOn=!voiceOn;this.textContent=voiceOn?'🔊 Voice on':'🔇 Voice off';" style="background:rgba(255,255,255,0.07);border:0.5px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.6);border-radius:20px;padding:4px 12px;font-size:11px;cursor:pointer;font-family:inherit;">🔊 Voice on</button>
-      <span id="t-kcal">~0 kcal</span>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+      <span style="font-size:12px;color:rgba(255,255,255,0.4);" id="t-pct">0%</span>
+      <button id="voice-toggle" class="voice-btn on" onclick="toggleVoice()">🔊 Voice on</button>
+      <span style="font-size:12px;color:rgba(255,255,255,0.4);" id="t-kcal">~0 kcal</span>
     </div>
     <div id="t-done-wrap" style="display:none;"></div>
     <button id="t-btn" class="btn-primary" onclick="toggleTimer()">▶ Start</button>
+    <button id="t-skip" onclick="skipInterval()" style="width:100%;margin-top:8px;padding:11px;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6);border:0.5px solid rgba(255,255,255,0.12);border-radius:11px;font-size:14px;cursor:pointer;font-family:inherit;display:none;">Skip to next interval →</button>
     <div id="t-intervals" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:14px;"></div>
   </div>
 </div>
@@ -174,6 +177,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="tab-btn" id="ttab-pace" onclick="toolTab('pace')">⏱ Pace</div>
       <div class="tab-btn" id="ttab-music" onclick="toolTab('music')">🎵 Music</div>
       <div class="tab-btn" id="ttab-routes" onclick="toolTab('routes')">📍 Routes</div>
+      <div class="tab-btn" id="ttab-profile" onclick="toolTab('profile')">👤 Me</div>
     </div>
     <div id="tool-weather-view">
       <h2 class="section-title" style="margin-top:0;">Weather check 🌤</h2>
@@ -193,33 +197,97 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
     <div id="tool-music-view" style="display:none;">
       <h2 class="section-title" style="margin-top:0;">Run playlists 🎵</h2>
-      <p style="font-size:13px;color:rgba(255,255,255,0.45);margin-bottom:14px;">Curated Spotify playlists for your runs</p>
-      <div class="card" style="display:flex;align-items:center;gap:12px;margin-bottom:9px;"><div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#1a1a2e,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">⚡</div><div style="flex:1;"><div style="font-size:14px;font-weight:600;">Power Run</div><div style="font-size:11px;color:rgba(255,255,255,0.4);">BPM 150–170 bangers</div></div><a style="background:#1DB954;color:#fff;border:none;border-radius:20px;padding:7px 12px;font-size:12px;font-weight:600;text-decoration:none;flex-shrink:0;" href="https://open.spotify.com/playlist/37i9dQZF1DX76Wlfdnj7AP">Open</a></div>
-      <div class="card" style="display:flex;align-items:center;gap:12px;margin-bottom:9px;"><div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#0d2b1f,#22c55e);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">✨</div><div style="flex:1;"><div style="font-size:14px;font-weight:600;">Happy Beats</div><div style="font-size:11px;color:rgba(255,255,255,0.4);">Feel-good pop</div></div><a style="background:#1DB954;color:#fff;border:none;border-radius:20px;padding:7px 12px;font-size:12px;font-weight:600;text-decoration:none;flex-shrink:0;" href="https://open.spotify.com/playlist/37i9dQZF1DXdPec7aLTmlC">Open</a></div>
-      <div class="card" style="display:flex;align-items:center;gap:12px;margin-bottom:9px;"><div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#1e1b3a,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🎯</div><div style="flex:1;"><div style="font-size:14px;font-weight:600;">Deep Focus Run</div><div style="font-size:11px;color:rgba(255,255,255,0.4);">Driving beats</div></div><a style="background:#1DB954;color:#fff;border:none;border-radius:20px;padding:7px 12px;font-size:12px;font-weight:600;text-decoration:none;flex-shrink:0;" href="https://open.spotify.com/playlist/37i9dQZF1DWZeKCadgRdKQ">Open</a></div>
-      <div class="card" style="display:flex;align-items:center;gap:12px;"><div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#1a2e1a,#4ade80);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🌅</div><div style="flex:1;"><div style="font-size:14px;font-weight:600;">Easy Morning</div><div style="font-size:11px;color:rgba(255,255,255,0.4);">Steady tempo</div></div><a style="background:#1DB954;color:#fff;border:none;border-radius:20px;padding:7px 12px;font-size:12px;font-weight:600;text-decoration:none;flex-shrink:0;" href="https://open.spotify.com/playlist/37i9dQZF1DX3rxVfibe1L0">Open</a></div>
+      <div class="card" style="display:flex;align-items:center;gap:12px;margin-bottom:9px;"><div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#1a1a2e,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">⚡</div><div style="flex:1;"><div style="font-size:14px;font-weight:600;">Power Run</div><div style="font-size:11px;color:rgba(255,255,255,0.4);">BPM 150-170</div></div><a style="background:#1DB954;color:#fff;border:none;border-radius:20px;padding:7px 12px;font-size:12px;font-weight:600;text-decoration:none;" href="https://open.spotify.com/playlist/37i9dQZF1DX76Wlfdnj7AP">Open</a></div>
+      <div class="card" style="display:flex;align-items:center;gap:12px;margin-bottom:9px;"><div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#0d2b1f,#22c55e);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">✨</div><div style="flex:1;"><div style="font-size:14px;font-weight:600;">Happy Beats</div><div style="font-size:11px;color:rgba(255,255,255,0.4);">Feel-good pop</div></div><a style="background:#1DB954;color:#fff;border:none;border-radius:20px;padding:7px 12px;font-size:12px;font-weight:600;text-decoration:none;" href="https://open.spotify.com/playlist/37i9dQZF1DXdPec7aLTmlC">Open</a></div>
+      <div class="card" style="display:flex;align-items:center;gap:12px;margin-bottom:9px;"><div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#1e1b3a,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🎯</div><div style="flex:1;"><div style="font-size:14px;font-weight:600;">Deep Focus Run</div><div style="font-size:11px;color:rgba(255,255,255,0.4);">Driving beats</div></div><a style="background:#1DB954;color:#fff;border:none;border-radius:20px;padding:7px 12px;font-size:12px;font-weight:600;text-decoration:none;" href="https://open.spotify.com/playlist/37i9dQZF1DWZeKCadgRdKQ">Open</a></div>
+      <div class="card" style="display:flex;align-items:center;gap:12px;"><div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#1a2e1a,#4ade80);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🌅</div><div style="flex:1;"><div style="font-size:14px;font-weight:600;">Easy Morning</div><div style="font-size:11px;color:rgba(255,255,255,0.4);">Steady tempo</div></div><a style="background:#1DB954;color:#fff;border:none;border-radius:20px;padding:7px 12px;font-size:12px;font-weight:600;text-decoration:none;" href="https://open.spotify.com/playlist/37i9dQZF1DX3rxVfibe1L0">Open</a></div>
     </div>
-    <div id="tool-routes-view" style="display:none;">
+      <div id="tool-profile-view" style="display:none;">
+      <h2 class="section-title" style="margin-top:0;">Your profile 👤</h2>
+      <p style="font-size:13px;color:rgba(255,255,255,0.45);margin-bottom:14px;">Used to calculate accurate calorie burn for your runs</p>
+      <div class="card">
+        <div class="meas-row">
+          <div><div class="meas-label">Weight (kg)</div><input class="meas-input" type="number" step="0.5" placeholder="e.g. 90" id="profile-weight" oninput="updateProfileCalc()"></div>
+          <div><div class="meas-label">Height (cm)</div><input class="meas-input" type="number" step="0.5" placeholder="e.g. 165" id="profile-height" oninput="updateProfileCalc()"></div>
+        </div>
+      </div>
+      <div class="card" style="background:linear-gradient(135deg,#1e3a5f,#1a1a2e);border-color:rgba(59,130,246,0.2);margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:0.5px solid rgba(255,255,255,0.05);">
+          <span style="font-size:12px;color:rgba(255,255,255,0.5);">BMI</span>
+          <span style="font-size:14px;font-weight:700;color:#93c5fd;" id="profile-bmi">—</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;">
+          <span style="font-size:12px;color:rgba(255,255,255,0.5);">Calorie estimate</span>
+          <span style="font-size:14px;font-weight:700;color:#93c5fd;" id="profile-est">—</span>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="saveProfileSettings()">Save profile ✓</button>
+    </div>
       <h2 class="section-title" style="margin-top:0;">Your local routes 📍</h2>
       <p style="font-size:13px;color:rgba(255,255,255,0.45);margin-bottom:14px;">All starting from City North Place, N4 3FS</p>
+
+      <div style="font-size:11px;color:#3b82f6;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;font-weight:600;">Beginner · Weeks 1–4</div>
+
       <div class="card" style="margin-bottom:9px;border-left:3px solid #22c55e;">
         <div style="font-size:14px;font-weight:700;margin-bottom:3px;">🌳 Finsbury Park Loop</div>
         <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px;">~3.2km · Flat tarmac · Parkrun route</div>
-        <div style="font-size:12px;color:rgba(255,255,255,0.45);line-height:1.7;margin-bottom:8px;">Head north on Lennox Road → enter park at Oxford Road gate → follow anti-clockwise tarmac path → one loop = 2.4km, add a half lap for 3.2km.</div>
-        <a class="btn-sm" href="https://maps.apple.com/?saddr=City+North+Place,+London+N4+3FS&daddr=Finsbury+Park,+London+N4+2NQ&dirflg=w" style="display:inline-block;text-decoration:none;">Open in Maps →</a>
+        <div style="font-size:12px;color:rgba(255,255,255,0.45);line-height:1.7;margin-bottom:8px;">Head north on Lennox Road, enter park at Oxford Road gate, follow anti-clockwise tarmac path. One loop is 2.4km, add a half lap for 3.2km.</div>
+        <a class="btn-sm" href="https://maps.apple.com/?saddr=City+North+Place,+London+N4+3FS&daddr=Finsbury+Park,+London+N4+2NQ&dirflg=w" style="display:inline-block;text-decoration:none;">Open in Maps</a>
       </div>
+
+      <div class="card" style="margin-bottom:9px;border-left:3px solid #22c55e;">
+        <div style="font-size:14px;font-weight:700;margin-bottom:3px;">🏟️ Emirates Stadium Loop</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px;">~2.5km · Flat · Iconic landmark</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.45);line-height:1.7;margin-bottom:8px;">Head south on Blackstock Road, run the marked route around the Arsenal Emirates Stadium on Drayton Park. Flat, well-lit, and great for early weeks. There are even marked running letters to aim for.</div>
+        <a class="btn-sm" href="https://maps.apple.com/?saddr=City+North+Place,+London+N4+3FS&daddr=Emirates+Stadium,+Highbury,+London+N7+7AJ&dirflg=w" style="display:inline-block;text-decoration:none;">Open in Maps</a>
+      </div>
+
+      <div style="font-size:11px;color:#8b5cf6;text-transform:uppercase;letter-spacing:.5px;margin:14px 0 8px;font-weight:600;">Intermediate · Weeks 3–6</div>
+
       <div class="card" style="margin-bottom:9px;border-left:3px solid #8b5cf6;">
         <div style="font-size:14px;font-weight:700;margin-bottom:3px;">🌿 Parkland Walk</div>
-        <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px;">~4km out & back · Traffic-free · Nature reserve</div>
-        <div style="font-size:12px;color:rgba(255,255,255,0.45);line-height:1.7;margin-bottom:8px;">Walk to FP station → pick up Parkland Walk trail → run north-east along old railway line → turn at 2km near Crouch Hill → run back.</div>
-        <a class="btn-sm" href="https://maps.apple.com/?saddr=City+North+Place,+London+N4+3FS&daddr=Parkland+Walk,+Finsbury+Park+entrance,+London+N4&dirflg=w" style="display:inline-block;text-decoration:none;">Open in Maps →</a>
+        <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px;">~4km out and back · Traffic-free · Nature reserve</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.45);line-height:1.7;margin-bottom:8px;">Walk to Finsbury Park station, pick up Parkland Walk trail, run north-east along old railway line, turn at 2km near Crouch Hill, run back. London's longest nature reserve — completely car-free.</div>
+        <a class="btn-sm" href="https://maps.apple.com/?saddr=City+North+Place,+London+N4+3FS&daddr=Parkland+Walk+Finsbury+Park+entrance+London+N4&dirflg=w" style="display:inline-block;text-decoration:none;">Open in Maps</a>
       </div>
-      <div class="card" style="border-left:3px solid #3b82f6;">
+
+      <div class="card" style="margin-bottom:9px;border-left:3px solid #8b5cf6;">
         <div style="font-size:14px;font-weight:700;margin-bottom:3px;">🏙️ Highbury Fields Loop</div>
-        <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px;">~5km · Week 5+ recommended</div>
-        <div style="font-size:12px;color:rgba(255,255,255,0.45);line-height:1.7;margin-bottom:8px;">South on Blackstock Road → left onto Highbury Park → enter Highbury Fields → run the perimeter loop → back via Highbury Grove.</div>
-        <a class="btn-sm" href="https://maps.apple.com/?saddr=City+North+Place,+London+N4+3FS&daddr=Highbury+Fields,+London+N5+1AR&dirflg=w" style="display:inline-block;text-decoration:none;">Open in Maps →</a>
+        <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px;">~5km · Gentle hills · Saturday parkrun here too</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.45);line-height:1.7;margin-bottom:8px;">South on Blackstock Road, left onto Highbury Park, enter Highbury Fields, run the perimeter loop, back via Highbury Grove. Islington's biggest park — free parkrun every Saturday at 9am.</div>
+        <a class="btn-sm" href="https://maps.apple.com/?saddr=City+North+Place,+London+N4+3FS&daddr=Highbury+Fields,+London+N5+1AR&dirflg=w" style="display:inline-block;text-decoration:none;">Open in Maps</a>
       </div>
+
+      <div class="card" style="margin-bottom:9px;border-left:3px solid #8b5cf6;">
+        <div style="font-size:14px;font-weight:700;margin-bottom:3px;">🏛️ Caledonian Park Loop</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px;">~4.5km · Historic park · Marked running route</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.45);line-height:1.7;margin-bottom:8px;">Head south-west to Caledonian Park near Caledonian Road tube. The park has a 600m marked running loop around its Grade II listed clock tower. Repeat laps or combine with streets to reach your target distance.</div>
+        <a class="btn-sm" href="https://maps.apple.com/?saddr=City+North+Place,+London+N4+3FS&daddr=Caledonian+Park,+Market+Road,+London+N7+9PL&dirflg=w" style="display:inline-block;text-decoration:none;">Open in Maps</a>
+      </div>
+
+      <div style="font-size:11px;color:#f59e0b;text-transform:uppercase;letter-spacing:.5px;margin:14px 0 8px;font-weight:600;">Advanced · Weeks 6–9</div>
+
+      <div class="card" style="margin-bottom:9px;border-left:3px solid #f59e0b;">
+        <div style="font-size:14px;font-weight:700;margin-bottom:3px;">🌊 Clissold Park & Stoke Newington</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px;">~6km · Varied terrain · Deer park</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.45);line-height:1.7;margin-bottom:8px;">Head east along Green Lanes into Stoke Newington, enter Clissold Park, run the perimeter past the deer enclosure and ponds, then return via Albion Road. A beautiful longer run for weeks 7-9.</div>
+        <a class="btn-sm" href="https://maps.apple.com/?saddr=City+North+Place,+London+N4+3FS&daddr=Clissold+Park,+Stoke+Newington+Church+Street,+London+N16+9HJ&dirflg=w" style="display:inline-block;text-decoration:none;">Open in Maps</a>
+      </div>
+
+      <div class="card" style="margin-bottom:9px;border-left:3px solid #f59e0b;">
+        <div style="font-size:14px;font-weight:700;margin-bottom:3px;">🏃 Finsbury Park to Highbury Fields</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px;">~7km loop · Your 5K race route</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.45);line-height:1.7;margin-bottom:8px;">The ultimate local run combining both parks. From City North, run through Finsbury Park, south along Blackstock Road, loop Highbury Fields, return via Highbury Grove and Blackstock Road. Save this for week 8 or 9.</div>
+        <a class="btn-sm" href="https://maps.apple.com/?saddr=City+North+Place,+London+N4+3FS&daddr=Highbury+Fields,+London+N5+1AR&dirflg=w" style="display:inline-block;text-decoration:none;">Open in Maps</a>
+      </div>
+
+      <div class="card" style="border-left:3px solid #f59e0b;">
+        <div style="font-size:14px;font-weight:700;margin-bottom:3px;">🎯 Alexandra Palace & Parkland Walk Full</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px;">~9km · Challenging · Epic views</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.45);line-height:1.7;margin-bottom:8px;">Take the full Parkland Walk all the way from Finsbury Park to Alexandra Palace — the old railway line rises steadily with panoramic London views at the top. A real achievement run for the end of your 9 weeks.</div>
+        <a class="btn-sm" href="https://maps.apple.com/?saddr=City+North+Place,+London+N4+3FS&daddr=Alexandra+Palace,+London+N22+7AY&dirflg=w" style="display:inline-block;text-decoration:none;">Open in Maps</a>
+      </div>
+
     </div>
   </div>
 </div>
@@ -235,10 +303,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div id="photo-note" class="card" style="margin-bottom:12px;display:none;">
       <div class="meas-label">Add a note to your photo</div>
       <textarea class="notes-input" rows="2" placeholder="How did the run feel?" id="photo-note-text"></textarea>
-      <button class="btn-primary" style="margin-top:8px;font-size:13px;padding:10px;" onclick="savePhoto()">Save photo ✓</button>
+      <button class="btn-primary" style="margin-top:8px;font-size:13px;padding:10px;" onclick="savePhoto()">Save photo</button>
     </div>
     <div id="photo-grid" class="photo-grid"></div>
-    <div id="photo-empty" class="card" style="text-align:center;color:rgba(255,255,255,0.38);padding:24px;">No photos yet. Tap + Add photo after your next run! 📸</div>
+    <div id="photo-empty" class="card" style="text-align:center;color:rgba(255,255,255,0.38);padding:24px;">No photos yet. Tap + Add photo after your next run!</div>
   </div>
 </div>
 
@@ -252,123 +320,205 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <script>
 var PLAN=[
-  {w:1,s:"8x1min run/1:30 walk",sessions:[
+  {w:1,s:"8x1min run / 1:30 walk",sessions:[
     {l:"Run 1",iv:[{t:"w",d:300},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:300}]},
     {l:"Run 2",iv:[{t:"w",d:300},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:300}]},
     {l:"Run 3",iv:[{t:"w",d:300},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:90},{t:"r",d:60},{t:"w",d:300}]},
   ]},
-  {w:2,s:"6x1:30 run/2min walk",sessions:[
+  {w:2,s:"6x1:30 run / 2min walk",sessions:[
     {l:"Run 1",iv:[{t:"w",d:300},{t:"r",d:90},{t:"w",d:120},{t:"r",d:90},{t:"w",d:120},{t:"r",d:90},{t:"w",d:120},{t:"r",d:90},{t:"w",d:120},{t:"r",d:90},{t:"w",d:120},{t:"r",d:90},{t:"w",d:300}]},
     {l:"Run 2",iv:[{t:"w",d:300},{t:"r",d:90},{t:"w",d:120},{t:"r",d:90},{t:"w",d:120},{t:"r",d:90},{t:"w",d:120},{t:"r",d:90},{t:"w",d:120},{t:"r",d:90},{t:"w",d:120},{t:"r",d:90},{t:"w",d:300}]},
     {l:"Run 3",iv:[{t:"w",d:300},{t:"r",d:90},{t:"w",d:120},{t:"r",d:90},{t:"w",d:120},{t:"r",d:90},{t:"w",d:120},{t:"r",d:90},{t:"w",d:120},{t:"r",d:90},{t:"w",d:120},{t:"r",d:90},{t:"w",d:300}]},
   ]},
-  {w:3,s:"1:30/3min combos",sessions:[
+  {w:3,s:"1:30 and 3min combos",sessions:[
     {l:"Run 1",iv:[{t:"w",d:300},{t:"r",d:90},{t:"w",d:90},{t:"r",d:180},{t:"w",d:180},{t:"r",d:90},{t:"w",d:90},{t:"r",d:180},{t:"w",d:300}]},
     {l:"Run 2",iv:[{t:"w",d:300},{t:"r",d:90},{t:"w",d:90},{t:"r",d:180},{t:"w",d:180},{t:"r",d:90},{t:"w",d:90},{t:"r",d:180},{t:"w",d:300}]},
     {l:"Run 3",iv:[{t:"w",d:300},{t:"r",d:90},{t:"w",d:90},{t:"r",d:180},{t:"w",d:180},{t:"r",d:90},{t:"w",d:90},{t:"r",d:180},{t:"w",d:300}]},
   ]},
-  {w:4,s:"3min/5min combos",sessions:[
+  {w:4,s:"3min and 5min combos",sessions:[
     {l:"Run 1",iv:[{t:"w",d:300},{t:"r",d:180},{t:"w",d:90},{t:"r",d:300},{t:"w",d:150},{t:"r",d:180},{t:"w",d:90},{t:"r",d:300},{t:"w",d:300}]},
     {l:"Run 2",iv:[{t:"w",d:300},{t:"r",d:180},{t:"w",d:90},{t:"r",d:300},{t:"w",d:150},{t:"r",d:180},{t:"w",d:90},{t:"r",d:300},{t:"w",d:300}]},
     {l:"Run 3",iv:[{t:"w",d:300},{t:"r",d:180},{t:"w",d:90},{t:"r",d:300},{t:"w",d:150},{t:"r",d:180},{t:"w",d:90},{t:"r",d:300},{t:"w",d:300}]},
   ]},
-  {w:5,s:"5min to 8min to 20min!",sessions:[
+  {w:5,s:"5min to 8min to 20min",sessions:[
     {l:"Run 1",iv:[{t:"w",d:300},{t:"r",d:300},{t:"w",d:180},{t:"r",d:300},{t:"w",d:180},{t:"r",d:300},{t:"w",d:300}]},
     {l:"Run 2",iv:[{t:"w",d:300},{t:"r",d:480},{t:"w",d:300},{t:"r",d:480},{t:"w",d:300}]},
     {l:"Run 3",iv:[{t:"w",d:300},{t:"r",d:1200},{t:"w",d:300}]},
   ]},
-  {w:6,s:"Building to 22min",sessions:[
+  {w:6,s:"Building to 22 minutes",sessions:[
     {l:"Run 1",iv:[{t:"w",d:300},{t:"r",d:300},{t:"w",d:180},{t:"r",d:480},{t:"w",d:180},{t:"r",d:480},{t:"w",d:300}]},
     {l:"Run 2",iv:[{t:"w",d:300},{t:"r",d:600},{t:"w",d:180},{t:"r",d:600},{t:"w",d:300}]},
     {l:"Run 3",iv:[{t:"w",d:300},{t:"r",d:1320},{t:"w",d:300}]},
   ]},
-  {w:7,s:"3x25min continuous",sessions:[
+  {w:7,s:"3 x 25 minutes continuous",sessions:[
     {l:"Run 1",iv:[{t:"w",d:300},{t:"r",d:1500},{t:"w",d:300}]},
     {l:"Run 2",iv:[{t:"w",d:300},{t:"r",d:1500},{t:"w",d:300}]},
     {l:"Run 3",iv:[{t:"w",d:300},{t:"r",d:1500},{t:"w",d:300}]},
   ]},
-  {w:8,s:"3x28min continuous",sessions:[
+  {w:8,s:"3 x 28 minutes continuous",sessions:[
     {l:"Run 1",iv:[{t:"w",d:300},{t:"r",d:1680},{t:"w",d:300}]},
     {l:"Run 2",iv:[{t:"w",d:300},{t:"r",d:1680},{t:"w",d:300}]},
     {l:"Run 3",iv:[{t:"w",d:300},{t:"r",d:1680},{t:"w",d:300}]},
   ]},
-  {w:9,s:"3x30min you did it!",sessions:[
+  {w:9,s:"3 x 30 minutes — you did it!",sessions:[
     {l:"Run 1",iv:[{t:"w",d:300},{t:"r",d:1800},{t:"w",d:300}]},
     {l:"Run 2",iv:[{t:"w",d:300},{t:"r",d:1800},{t:"w",d:300}]},
-    {l:"Run 3 Race day!",iv:[{t:"w",d:300},{t:"r",d:1800},{t:"w",d:300}]},
+    {l:"Run 3",iv:[{t:"w",d:300},{t:"r",d:1800},{t:"w",d:300}]},
   ]},
 ];
 
 var BADGES=[
   {id:"first_run",icon:"👟",name:"First step",desc:"Complete your first run",check:function(d,s){return s.length>=1;}},
-  {id:"week1",icon:"📅",name:"Week 1 done",desc:"Complete all of week 1",check:function(d,s){return [0,1,2].every(function(i){return d["0-"+i];});}},
+  {id:"week1",icon:"📅",name:"Week 1 done",desc:"Complete all of week 1",check:function(d){return d["0-0"]&&d["0-1"]&&d["0-2"];}},
   {id:"streak3",icon:"🔥",name:"3-day streak",desc:"Run 3 days in a row",check:function(d,s,sd){return calcStreak(sd)>=3;}},
-  {id:"halfway",icon:"🏃",name:"Halfway there",desc:"Complete week 5",check:function(d,s){return PLAN[4].sessions.every(function(_,i){return d["4-"+i];});}},
-  {id:"run20",icon:"⏱",name:"20 minutes!",desc:"Complete week 5 run 3",check:function(d,s){return d["4-2"];}},
+  {id:"halfway",icon:"🏃",name:"Halfway there",desc:"Complete week 5",check:function(d){return d["4-0"]&&d["4-1"]&&d["4-2"];}},
+  {id:"run20",icon:"⏱",name:"20 minutes!",desc:"Complete week 5 run 3",check:function(d){return d["4-2"];}},
   {id:"week9",icon:"🎽",name:"Plan complete",desc:"Finish all 9 weeks",check:function(d,s){return s.length>=27;}},
   {id:"photo1",icon:"📸",name:"Smile!",desc:"Log your first run photo",check:function(d,s,sd,ph){return ph.length>=1;}},
-  {id:"parkrun",icon:"🏅",name:"Parkrun ready",desc:"Complete week 8",check:function(d,s){return PLAN[7].sessions.every(function(_,i){return d["7-"+i];});}},
+  {id:"parkrun",icon:"🏅",name:"Parkrun ready",desc:"Complete week 8",check:function(d){return d["7-0"]&&d["7-1"]&&d["7-2"];}},
   {id:"sessions9",icon:"💪",name:"9 sessions",desc:"Complete 9 sessions",check:function(d,s){return s.length>=9;}},
 ];
 
 var TIPS=[
-  "You don't need to run fast - just slow enough to hold a conversation.",
+  "You don't need to run fast. Just slow enough to hold a conversation.",
   "Mental health boost: notice 3 things you can see, hear and feel while running.",
-  "Missed a day? No stress - just pick up where you left off.",
+  "Missed a day? No stress. Just pick up where you left off.",
   "Rest days matter as much as run days. Embrace them.",
-  "If a week feels hard, repeat it - there's no shame in consolidating.",
+  "If a week feels hard, repeat it. There is no shame in consolidating.",
   "Running outside? Morning light boosts serotonin.",
-  "Celebrate every completed session. That's a win.",
+  "Celebrate every completed session. That is a win.",
   "Stay hydrated before, during and after every run.",
 ];
 
-var completed={},streakDates=[],photos=[],pendingPhoto=null;
-var tWi=0,tSi=0,tIi=0,tElapsed=0,tRunning=false,tDone=false,timerInt=null,voiceOn=true;
+var completed={}, streakDates=[], photos=[], pendingPhoto=null;
+var tWi=0, tSi=0, tIi=0, tElapsed=0, tRunning=false, tDone=false, timerInt=null;
+var voiceOn=true;
+var userWeight=70, userHeight=165;
+
+function loadProfile(){
+  try{userWeight=parseFloat(localStorage.getItem("c25k_weight")||"70");}catch(e){}
+  try{userHeight=parseFloat(localStorage.getItem("c25k_height")||"165");}catch(e){}
+}
+function saveProfile(){
+  try{localStorage.setItem("c25k_weight",userWeight);localStorage.setItem("c25k_height",userHeight);}catch(e){}
+}
+function calcCalories(iv){
+  var runSecs=totalRun(iv);
+  var met=8.0;
+  return Math.round((met*3.5*userWeight/200)*(runSecs/60));
+}
 
 function load(){
   try{completed=JSON.parse(localStorage.getItem("c25k_done")||"{}");}catch(e){completed={};}
   try{streakDates=JSON.parse(localStorage.getItem("c25k_dates")||"[]");}catch(e){streakDates=[];}
   try{photos=JSON.parse(localStorage.getItem("c25k_photos")||"[]");}catch(e){photos=[];}
-}
-function saveData(){
-  try{localStorage.setItem("c25k_done",JSON.stringify(completed));localStorage.setItem("c25k_dates",JSON.stringify(streakDates));localStorage.setItem("c25k_photos",JSON.stringify(photos));}catch(e){}
-}
-function speak(text){
-  if(!voiceOn||!window.speechSynthesis)return;
-  window.speechSynthesis.cancel();
-  var u=new SpeechSynthesisUtterance(text);
-  u.rate=0.95;u.pitch=1;u.volume=1;
-  var voices=window.speechSynthesis.getVoices();
-  var preferred=voices.find(function(v){return v.name.indexOf('Samantha')>-1||v.name.indexOf('Karen')>-1||v.name.indexOf('Daniel')>-1;});
-  if(preferred)u.voice=preferred;
-  window.speechSynthesis.speak(u);
+  loadProfile();
 }
 
-var m=Math.floor(s/60),sc=s%60;return sc===0?m+"m":m+"m "+sc+"s";}
-function totalRun(iv){return iv.filter(function(i){return i.t==="r";}).reduce(function(a,b){return a+b.d;},0);}
-function totalAll(iv){return iv.reduce(function(a,b){return a+b.d;},0);}
-function cals(iv){return Math.round(totalRun(iv)/60*7);}
+function saveData(){
+  try{
+    localStorage.setItem("c25k_done",JSON.stringify(completed));
+    localStorage.setItem("c25k_dates",JSON.stringify(streakDates));
+    localStorage.setItem("c25k_photos",JSON.stringify(photos));
+  }catch(e){}
+}
+
+function fmt(s){
+  var m=Math.floor(s/60), sc=s%60;
+  return sc===0 ? m+"m" : m+"m "+sc+"s";
+}
+
+function totalRun(iv){
+  return iv.filter(function(i){return i.t==="r";}).reduce(function(a,b){return a+b.d;},0);
+}
+
+function totalAll(iv){
+  return iv.reduce(function(a,b){return a+b.d;},0);
+}
+
+function cals(iv){
+  return Math.round(totalRun(iv)/60*7);
+}
+
 function calcStreak(sd){
-  if(!sd.length)return 0;
+  if(!sd||!sd.length)return 0;
   var days=sd.map(function(d){return d.split("T")[0];}).filter(function(v,i,a){return a.indexOf(v)===i;}).sort().reverse();
   var today=new Date().toISOString().split("T")[0];
-  var count=0,cur=today;
-  for(var i=0;i<days.length;i++){if(days[i]===cur){count++;var dt=new Date(cur);dt.setDate(dt.getDate()-1);cur=dt.toISOString().split("T")[0];}else break;}
+  var count=0, cur=today;
+  for(var i=0;i<days.length;i++){
+    if(days[i]===cur){
+      count++;
+      var dt=new Date(cur);
+      dt.setDate(dt.getDate()-1);
+      cur=dt.toISOString().split("T")[0];
+    } else break;
+  }
   return count;
 }
+
 function getInfo(){
   var done=Object.keys(completed).length;
   var wk=Math.min(Math.floor(done/3)+1,9);
   return{done:done,wk:wk};
 }
+
+function speak(text){
+  if(!voiceOn||!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  var u=new SpeechSynthesisUtterance(text);
+  u.rate=0.95; u.pitch=1; u.volume=1;
+  window.speechSynthesis.speak(u);
+}
+
+function vibrate(pattern){
+  if(window.navigator&&window.navigator.vibrate){
+    window.navigator.vibrate(pattern);
+  }
+}
+
+function announceInterval(type){
+  if(type==="r"){
+    speak('Start running!');
+    vibrate([100,50,100,50,200]);
+  } else {
+    speak('Walk now. Great work!');
+    vibrate([400]);
+  }
+}
+
+function announceCountdown(rem){
+  if(rem===30){ speak('30 seconds remaining.'); vibrate([80]); }
+  else if(rem===10){ speak('10 seconds.'); vibrate([80,50,80]); }
+  else if(rem===3){ speak('3'); vibrate([60]); }
+  else if(rem===2){ speak('2'); vibrate([60]); }
+  else if(rem===1){ speak('1'); vibrate([60]); }
+}
+
+function toggleVoice(){
+  voiceOn=!voiceOn;
+  var btn=document.getElementById('voice-toggle');
+  if(voiceOn){
+    btn.textContent='🔊 Voice on';
+    btn.className='voice-btn on';
+  } else {
+    btn.textContent='🔇 Voice off';
+    btn.className='voice-btn';
+    window.speechSynthesis&&window.speechSynthesis.cancel();
+  }
+}
+
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
   document.querySelectorAll('.nav button').forEach(function(b){b.classList.remove('active');});
   document.getElementById(id).classList.add('active');
-  var nb=document.getElementById('nav-'+id);if(nb)nb.classList.add('active');
-  var fns={home:renderHome,plan:renderPlan,badges:renderBadges,photos:renderPhotos};
-  if(fns[id])fns[id]();
+  var nb=document.getElementById('nav-'+id);
+  if(nb)nb.classList.add('active');
+  if(id==='home')renderHome();
+  if(id==='plan')renderPlan();
+  if(id==='badges')renderBadges();
+  if(id==='photos')renderPhotos();
 }
+
 function renderHome(){
   var r=getInfo();
   document.getElementById('h-done').textContent=r.done;
@@ -381,23 +531,34 @@ function renderHome(){
   document.getElementById('photo-count').textContent=photos.length+" photo"+(photos.length!==1?"s":"");
   var wi=r.wk-1;
   var nextSi=-1;
-  for(var i=0;i<PLAN[wi].sessions.length;i++){if(!completed[wi+"-"+i]){nextSi=i;break;}}
+  for(var i=0;i<PLAN[wi].sessions.length;i++){
+    if(!completed[wi+"-"+i]){nextSi=i;break;}
+  }
   var wrap=document.getElementById('home-next');
-  if(nextSi===-1){wrap.innerHTML='<div class="card" style="background:linear-gradient(135deg,#0d2b1f,#1a4a35);border-color:rgba(74,222,128,0.3);text-align:center;margin-bottom:9px;"><div style="font-size:28px;margin-bottom:6px;">🎉</div><div style="font-size:17px;font-weight:800;">Week '+r.wk+' complete!</div></div>';return;}
+  if(nextSi===-1){
+    wrap.innerHTML='<div class="card" style="background:linear-gradient(135deg,#0d2b1f,#1a4a35);border-color:rgba(74,222,128,0.3);text-align:center;margin-bottom:9px;"><div style="font-size:28px;margin-bottom:6px;">🎉</div><div style="font-size:17px;font-weight:800;">Week '+r.wk+' complete!</div></div>';
+    return;
+  }
   var sess=PLAN[wi].sessions[nextSi];
-  wrap.innerHTML='<div class="card" style="background:linear-gradient(135deg,#1a1a2e,#0f3460);border-color:rgba(59,130,246,0.25);margin-bottom:9px;"><div style="font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px;">Next session</div><div style="font-size:17px;font-weight:800;margin-bottom:2px;">Week '+r.wk+' - '+sess.l+'</div><div style="font-size:12px;color:rgba(255,255,255,0.45);margin-bottom:12px;">'+PLAN[wi].s+' - ~'+cals(sess.iv)+' kcal</div><button class="btn-primary" onclick="startSession('+wi+','+nextSi+')" style="font-size:14px;padding:11px;">Start session</button></div>';
+  wrap.innerHTML='<div class="card" style="background:linear-gradient(135deg,#1a1a2e,#0f3460);border-color:rgba(59,130,246,0.25);margin-bottom:9px;"><div style="font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px;">Next session</div><div style="font-size:17px;font-weight:800;margin-bottom:2px;">Week '+r.wk+' - '+sess.l+'</div><div style="font-size:12px;color:rgba(255,255,255,0.45);margin-bottom:12px;">'+PLAN[wi].s+' - approximately '+calcCalories(sess.iv)+' kcal</div><button class="btn-primary" onclick="startSession('+wi+','+nextSi+')" style="font-size:14px;padding:11px;">Start session</button></div>';
 }
+
 function startSession(wi,si){
-  tWi=wi;tSi=si;tIi=0;tElapsed=0;tRunning=false;tDone=false;
+  tWi=wi; tSi=si; tIi=0; tElapsed=0; tRunning=false; tDone=false;
   clearInterval(timerInt);
   document.getElementById('t-label').textContent='Week '+(wi+1)+' - '+PLAN[wi].sessions[si].l;
   document.getElementById('t-done-wrap').style.display='none';
-  document.getElementById('t-btn').style.display='block';
-  document.getElementById('t-btn').textContent='Start';
-  document.getElementById('t-btn').onclick=toggleTimer;
+  var btn=document.getElementById('t-btn');
+  btn.style.display='block';
+  btn.textContent='Start';
+  btn.onclick=toggleTimer;
+  var vbtn=document.getElementById('voice-toggle');
+  vbtn.textContent=voiceOn?'🔊 Voice on':'🔇 Voice off';
+  vbtn.className='voice-btn'+(voiceOn?' on':'');
   renderTimer();
   showScreen('timer');
 }
+
 function renderTimer(){
   var sess=PLAN[tWi].sessions[tSi];
   var iv=sess.iv[tIi];
@@ -406,70 +567,119 @@ function renderTimer(){
   var pct=Math.round(elTot/totalAll(sess.iv)*100);
   var isRun=iv.t==="r";
   document.getElementById('timer-hero').className='timer-hero'+(isRun?'':' walk');
-  document.getElementById('t-phase').textContent=isRun?'Run':'Walk';
-  document.getElementById('t-phase').style.color=isRun?'#60a5fa':'#4ade80';
+  var phase=document.getElementById('t-phase');
+  phase.textContent=isRun?'🏃 Run':'🚶 Walk';
+  phase.style.color=isRun?'#60a5fa':'#4ade80';
   document.getElementById('t-time').textContent=fmt(rem);
   document.getElementById('t-sub').textContent='interval '+(tIi+1)+' of '+sess.iv.length;
   document.getElementById('t-progress').style.width=pct+'%';
   document.getElementById('t-pct').textContent=pct+'% done';
-  document.getElementById('t-kcal').textContent='~'+cals(sess.iv)+' kcal';
-  document.getElementById('t-intervals').innerHTML=sess.iv.slice(tIi).map(function(iv){return'<span class="pill '+(iv.t==="r"?"run":"walk")+'">'+(iv.t==="r"?"run":"walk")+' '+fmt(iv.d)+'</span>';}).join('');
+  document.getElementById('t-kcal').textContent='~'+calcCalories(sess.iv)+' kcal';
+  document.getElementById('t-intervals').innerHTML=sess.iv.slice(tIi).map(function(x){
+    return'<span class="pill '+(x.t==="r"?"run":"walk")+'">'+(x.t==="r"?"run":"walk")+' '+fmt(x.d)+'</span>';
+  }).join('');
 }
+
+function skipInterval(){
+  if(tDone)return;
+  var sess=PLAN[tWi].sessions[tSi];
+  tIi++;
+  if(tIi>=sess.iv.length){
+    clearInterval(timerInt);
+    tDone=true;tRunning=false;
+    speak('Session complete! Well done, you did it!');
+    showDone();
+    return;
+  }
+  tElapsed=0;
+  var nextIv=sess.iv[tIi];
+  if(nextIv.t==="r"){speak('Start running!');}
+  else{speak('Walk now.');}
+  renderTimer();
+}
+
 function toggleTimer(){
   if(tDone)return;
   tRunning=!tRunning;
   var btn=document.getElementById('t-btn');
   btn.textContent=tRunning?'Pause':'Start';
   if(tRunning){
-    speak('Starting session. Let\'s go!');
+    speak('Starting session. Lets go!');
+    document.getElementById('t-skip').style.display='block';
     timerInt=setInterval(function(){
       var sess=PLAN[tWi].sessions[tSi];
       var iv=sess.iv[tIi];
-      var prevIsRun=iv.t==="r";
       tElapsed++;
-      var remaining=iv.d-tElapsed;
+      var rem=iv.d-tElapsed;
       if(tElapsed>=iv.d){
         tIi++;
         if(tIi>=sess.iv.length){
-          clearInterval(timerInt);tDone=true;tRunning=false;
+          clearInterval(timerInt);
+          tDone=true;
+          tRunning=false;
           speak('Session complete! Well done, you did it!');
-          showDone();return;
+          showDone();
+          return;
         }
         tElapsed=0;
         var nextIv=sess.iv[tIi];
         if(nextIv.t==="r"){speak('Start running!');}
         else{speak('Walk now. Great work!');}
       } else {
-        if(remaining===30){speak('30 seconds remaining.');}
-        if(remaining===10){speak('10 seconds.');}
-        if(remaining===3){speak('3');}
-        if(remaining===2){speak('2');}
-        if(remaining===1){speak('1');}
+        if(rem===30){speak('30 seconds remaining.');}
+        else if(rem===10){speak('10 seconds.');}
+        else if(rem===3){speak('3');}
+        else if(rem===2){speak('2');}
+        else if(rem===1){speak('1');}
       }
       renderTimer();
     },1000);
-  }else{
+  } else {
     clearInterval(timerInt);
-    window.speechSynthesis&&window.speechSynthesis.cancel();
+    document.getElementById('t-skip').style.display='none';
+    if(window.speechSynthesis)window.speechSynthesis.cancel();
   }
 }
+
 function showDone(){
   var mot=TIPS[Math.floor(Math.random()*TIPS.length)];
-  document.getElementById('t-done-wrap').style.display='block';
-  document.getElementById('t-done-wrap').innerHTML='<div class="card" style="background:linear-gradient(135deg,#1a1a2e,#0f3460);border-color:rgba(59,130,246,0.3);text-align:center;margin-bottom:10px;"><div style="font-size:32px;margin-bottom:6px;">🎉</div><div style="font-size:18px;font-weight:800;margin-bottom:6px;">Session complete!</div><p style="font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:8px;">'+mot+'</p></div>';
+  var sess=PLAN[tWi].sessions[tSi];
+  var kcal=calcCalories(sess.iv);
+  var dw=document.getElementById('t-done-wrap');
+  dw.style.display='block';
+  dw.innerHTML='<div class="card" style="background:linear-gradient(135deg,#1a1a2e,#0f3460);border-color:rgba(59,130,246,0.3);text-align:center;margin-bottom:10px;"><div style="font-size:32px;margin-bottom:6px;">🎉</div><div style="font-size:18px;font-weight:800;margin-bottom:4px;">Session complete!</div><div style="font-size:13px;color:#60a5fa;margin-bottom:8px;">~'+kcal+' kcal burned</div><p style="font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:0;">'+mot+'</p></div>'
+  +'<div class="card" style="margin-bottom:10px;"><div style="font-size:13px;font-weight:700;margin-bottom:10px;">How hard was that? 💪</div><div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;" id="effort-grid">'
+  +['😴','🙂','😤','🥵','💀'].map(function(e,i){
+    var labels=['Very easy','Easy','Moderate','Hard','Very hard'];
+    return'<button onclick="selectEffort('+i+')" id="eff-'+i+'" style="background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 4px;cursor:pointer;font-family:inherit;"><div style="font-size:22px;margin-bottom:3px;">'+e+'</div><div style="font-size:9px;color:rgba(255,255,255,0.4);">'+labels[i]+'</div></button>';
+  }).join('')+'</div></div>';
   var btn=document.getElementById('t-btn');
   btn.textContent='Save and continue';
   btn.onclick=markDone;
 }
+
+var selectedEffort=-1;
+function selectEffort(i){
+  selectedEffort=i;
+  for(var j=0;j<5;j++){
+    var b=document.getElementById('eff-'+j);
+    if(b)b.style.background=j===i?'rgba(59,130,246,0.25)':'rgba(255,255,255,0.05)';
+    if(b)b.style.borderColor=j===i?'#3b82f6':'rgba(255,255,255,0.1)';
+  }
+}
+
 function markDone(){
   var key=tWi+"-"+tSi;
-  completed[key]=true;
+  var sess=PLAN[tWi].sessions[tSi];
+  completed[key]={date:new Date().toISOString(),effort:selectedEffort,kcal:calcCalories(sess.iv)};
+  selectedEffort=-1;
   streakDates.push(new Date().toISOString());
   saveData();
   checkBadges();
   renderHome();
   showScreen('home');
 }
+
 function checkBadges(){
   BADGES.forEach(function(b){
     if(b.check(completed,Object.keys(completed),streakDates,photos)){
@@ -480,10 +690,10 @@ function checkBadges(){
     }
   });
 }
+
 function renderPlan(){
   var r=getInfo();
-  var list=document.getElementById('plan-list');
-  list.innerHTML=PLAN.map(function(wk,wi){
+  document.getElementById('plan-list').innerHTML=PLAN.map(function(wk,wi){
     var wDone=wk.sessions.filter(function(_,si){return completed[wi+"-"+si];}).length;
     var isCur=wi+1===r.wk;
     var btns=wk.sessions.map(function(s,si){
@@ -498,25 +708,52 @@ function renderPlan(){
     return'<div class="week-card'+(isCur?' current':'')+'"><div class="week-header"><div><span style="font-size:14px;font-weight:700;color:'+(isCur?'#93c5fd':'rgba(255,255,255,0.8)')+'">Week '+(wi+1)+'</span><span style="font-size:11px;color:rgba(255,255,255,0.4);margin-left:8px;">'+wk.s+'</span></div><span style="font-size:12px;color:rgba(255,255,255,0.35);">'+wDone+'/3</span></div><div style="padding:8px 12px 12px;display:flex;gap:8px;">'+btns+'</div></div>';
   }).join('');
 }
+
 function renderBadges(){
   document.getElementById('badge-grid').innerHTML=BADGES.map(function(b){
     var earned=b.check(completed,Object.keys(completed),streakDates,photos);
     return'<div class="badge'+(earned?' earned':'')+'"><div class="badge-icon">'+b.icon+'</div><div class="badge-name">'+b.name+'</div><div class="badge-desc">'+b.desc+'</div></div>';
   }).join('');
 }
+
 function toolTab(t){
-  ['weather','pace','music','routes'].forEach(function(x){
+  ['weather','pace','music','routes','profile'].forEach(function(x){
     document.getElementById('tool-'+x+'-view').style.display=x===t?'block':'none';
     document.getElementById('ttab-'+x).className='tab-btn'+(x===t?' active':'');
   });
+  if(t==='profile')renderProfile();
 }
+
+function renderProfile(){
+  document.getElementById('profile-weight').value=userWeight;
+  document.getElementById('profile-height').value=userHeight;
+  updateProfileCalc();
+}
+
+function updateProfileCalc(){
+  var w=parseFloat(document.getElementById('profile-weight').value)||userWeight;
+  var h=parseFloat(document.getElementById('profile-height').value)||userHeight;
+  var bmi=(w/((h/100)*(h/100))).toFixed(1);
+  var cat=bmi<18.5?'Underweight':bmi<25?'Healthy weight':bmi<30?'Overweight':'Obese';
+  var est=Math.round((8.0*3.5*w/200)*20);
+  document.getElementById('profile-bmi').textContent=bmi+' ('+cat+')';
+  document.getElementById('profile-est').textContent='~'+est+' kcal per 20min run';
+}
+
+function saveProfileSettings(){
+  userWeight=parseFloat(document.getElementById('profile-weight').value)||70;
+  userHeight=parseFloat(document.getElementById('profile-height').value)||165;
+  saveProfile();
+  updateProfileCalc();
+  alert('Profile saved! Calorie estimates updated ✓');
+}
+
 function getWeather(){
   var res=document.getElementById('weather-result');
   res.innerHTML='<div class="card" style="text-align:center;color:rgba(255,255,255,0.5);padding:16px;">Getting your location...</div>';
   if(!navigator.geolocation){res.innerHTML='<div class="card" style="color:rgba(255,255,255,0.5);">Location not available.</div>';return;}
   navigator.geolocation.getCurrentPosition(function(pos){
-    var lat=pos.coords.latitude,lon=pos.coords.longitude;
-    fetch('https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&current=temperature_2m,weathercode,windspeed_10m,precipitation&timezone=auto')
+    fetch('https://api.open-meteo.com/v1/forecast?latitude='+pos.coords.latitude+'&longitude='+pos.coords.longitude+'&current=temperature_2m,weathercode,windspeed_10m,precipitation&timezone=auto')
     .then(function(r){return r.json();})
     .then(function(data){
       var c=data.current;
@@ -531,19 +768,21 @@ function getWeather(){
     }).catch(function(){res.innerHTML='<div class="card" style="color:rgba(255,255,255,0.5);">Could not load weather.</div>';});
   },function(){res.innerHTML='<div class="card" style="color:rgba(255,255,255,0.5);">Location access denied.</div>';});
 }
+
 function calcPace(){
   var dist=parseFloat(document.getElementById('pace-dist').value);
   var mins=parseFloat(document.getElementById('pace-mins').value);
   var res=document.getElementById('pace-result');
   if(!dist||!mins||dist<=0||mins<=0){res.innerHTML='';return;}
-  var paceMinKm=mins/dist;
-  var paceMin=Math.floor(paceMinKm);
-  var paceSec=Math.round((paceMinKm-paceMin)*60);
-  var speedKmh=(dist/(mins/60)).toFixed(1);
-  var fiveKmins=Math.round(paceMinKm*5);
-  var fiveKh=Math.floor(fiveKmins/60),fiveKm=fiveKmins%60;
-  res.innerHTML='<div class="pace-result"><div class="pace-row"><span style="font-size:12px;color:rgba(255,255,255,0.5);">Pace</span><span style="font-size:16px;font-weight:700;color:#93c5fd;">'+paceMin+':'+(paceSec<10?'0':'')+paceSec+' per km</span></div><div class="pace-row"><span style="font-size:12px;color:rgba(255,255,255,0.5);">Speed</span><span style="font-size:14px;font-weight:700;">'+speedKmh+' km/h</span></div><div class="pace-row"><span style="font-size:12px;color:rgba(255,255,255,0.5);">Est 5K time</span><span style="font-size:14px;font-weight:700;">'+(fiveKh>0?fiveKh+'h ':'')+fiveKm+' min</span></div></div>';
+  var pkm=mins/dist;
+  var pm=Math.floor(pkm);
+  var ps=Math.round((pkm-pm)*60);
+  var spd=(dist/(mins/60)).toFixed(1);
+  var fkm=Math.round(pkm*5);
+  var fh=Math.floor(fkm/60), fm=fkm%60;
+  res.innerHTML='<div class="pace-result"><div class="pace-row"><span style="font-size:12px;color:rgba(255,255,255,0.5);">Pace</span><span style="font-size:16px;font-weight:700;color:#93c5fd;">'+pm+':'+(ps<10?'0':'')+ps+' per km</span></div><div class="pace-row"><span style="font-size:12px;color:rgba(255,255,255,0.5);">Speed</span><span style="font-size:14px;font-weight:700;">'+spd+' km/h</span></div><div class="pace-row"><span style="font-size:12px;color:rgba(255,255,255,0.5);">Est 5K time</span><span style="font-size:14px;font-weight:700;">'+(fh>0?fh+'h ':'')+fm+' min</span></div></div>';
 }
+
 function addPhoto(input){
   if(!input.files||!input.files[0])return;
   var reader=new FileReader();
@@ -554,6 +793,7 @@ function addPhoto(input){
   };
   reader.readAsDataURL(input.files[0]);
 }
+
 function savePhoto(){
   if(!pendingPhoto)return;
   pendingPhoto.note=document.getElementById('photo-note-text').value;
@@ -566,6 +806,7 @@ function savePhoto(){
   var pc=document.getElementById('photo-count');
   if(pc)pc.textContent=photos.length+' photo'+(photos.length!==1?'s':'');
 }
+
 function renderPhotos(){
   var grid=document.getElementById('photo-grid');
   var empty=document.getElementById('photo-empty');
@@ -576,14 +817,26 @@ function renderPhotos(){
     return'<div class="photo-item"><img src="'+p.data+'" alt="run photo"><div class="photo-overlay"><div style="font-size:11px;font-weight:600;color:#fff;">'+d+'</div>'+(p.note?'<div style="font-size:10px;color:rgba(255,255,255,0.7);">'+p.note+'</div>':'')+'</div></div>';
   }).join('');
 }
+
 load();
 renderHome();
+
 (function(){
   var splash=document.getElementById('splash');
   var dots=[document.getElementById('cd0'),document.getElementById('cd1'),document.getElementById('cd2')];
   var d=0;
-  var di=setInterval(function(){d=(d+1)%3;for(var i=0;i<dots.length;i++){dots[i].style.background=i===d?'#3b82f6':'rgba(255,255,255,0.2)';}},400);
-  setTimeout(function(){clearInterval(di);splash.style.transition='opacity 0.5s ease';splash.style.opacity='0';setTimeout(function(){splash.style.display='none';},500);},2200);
+  var di=setInterval(function(){
+    d=(d+1)%3;
+    for(var i=0;i<dots.length;i++){
+      dots[i].style.background=i===d?'#3b82f6':'rgba(255,255,255,0.2)';
+    }
+  },400);
+  setTimeout(function(){
+    clearInterval(di);
+    splash.style.transition='opacity 0.5s ease';
+    splash.style.opacity='0';
+    setTimeout(function(){splash.style.display='none';},500);
+  },2200);
 })();
 </script>
 </body>
