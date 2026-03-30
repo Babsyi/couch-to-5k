@@ -408,6 +408,7 @@ function showScreen(id){
   if(id==="plan")renderPlan();
   if(id==="badges")renderBadges();
   if(id==="photos")renderPhotos();
+  if(id==="tools")toolTab("weather");
 }
 
 function renderHome(){
@@ -614,26 +615,36 @@ function toolTab(t){
     if(btn)btn.className="tab-btn"+(x===t?" active":"");
   });
   if(t==="profile"){
-    document.getElementById("profile-weight").value=userWeight;
-    document.getElementById("profile-height").value=userHeight;
+    var pw=document.getElementById("profile-weight");
+    var ph=document.getElementById("profile-height");
+    if(pw)pw.value=userWeight;
+    if(ph)ph.value=userHeight;
     updateProfileCalc();
   }
 }
 
 function updateProfileCalc(){
-  var w=parseFloat(document.getElementById("profile-weight").value)||userWeight;
-  var h=parseFloat(document.getElementById("profile-height").value)||userHeight;
-  if(w&&h){
+  var pw=document.getElementById("profile-weight");
+  var ph=document.getElementById("profile-height");
+  var pb=document.getElementById("profile-bmi");
+  var pe=document.getElementById("profile-est");
+  if(!pw||!ph||!pb||!pe)return;
+  var w=parseFloat(pw.value)||userWeight;
+  var h=parseFloat(ph.value)||userHeight;
+  if(w>0&&h>0){
     var bmi=(w/((h/100)*(h/100))).toFixed(1);
     var cat=bmi<18.5?"Underweight":bmi<25?"Healthy weight":bmi<30?"Overweight":"Obese";
-    document.getElementById("profile-bmi").textContent=bmi+" ("+cat+")";
-    document.getElementById("profile-est").textContent="~"+Math.round((8.0*3.5*w/200)*20)+" kcal";
+    pb.textContent=bmi+" ("+cat+")";
+    pe.textContent="~"+Math.round((8.0*3.5*w/200)*20)+" kcal";
   }
 }
 
 function saveProfileSettings(){
-  userWeight=parseFloat(document.getElementById("profile-weight").value)||70;
-  userHeight=parseFloat(document.getElementById("profile-height").value)||165;
+  var pw=document.getElementById("profile-weight");
+  var ph=document.getElementById("profile-height");
+  if(!pw||!ph)return;
+  userWeight=parseFloat(pw.value)||70;
+  userHeight=parseFloat(ph.value)||165;
   try{localStorage.setItem("c25k_uw",userWeight);localStorage.setItem("c25k_uh",userHeight);}catch(e){}
   updateProfileCalc();
   alert("Profile saved! Calorie estimates updated.");
